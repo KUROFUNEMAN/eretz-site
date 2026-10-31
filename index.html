@@ -1,0 +1,1053 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>エレツ株式会社 ERETZ</title>
+<meta name="description" content="エレツ株式会社（北九州市小倉南区）。福祉、KUROFUNEMAN PROJECT、デザイン／コンサル、衣食住。グループ会社 HEADS株式会社。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Michroma&family=Saira+Stencil+One&family=Shippori+Mincho+B1:wght@500;800&family=Zen+Kaku+Gothic+New:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --abyss:#03070f; --tide:#0b1830; --brass:#d4ab52; --amber:#ffcf6e;
+  --brass-dim:rgba(212,171,82,.26); --signal:#e1262d; --foam:#e8edf1; --haze:#8794a8;
+}
+*{box-sizing:border-box}
+html{overflow-x:hidden;scroll-behavior:smooth}
+body{margin:0;background:var(--abyss);color:var(--foam);font:400 16px/1.9 "Zen Kaku Gothic New",sans-serif;letter-spacing:.04em;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:1px solid var(--amber);outline-offset:4px}
+.lat{font-family:Michroma,sans-serif;letter-spacing:.14em}
+/* 走査線と粒子 */
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:40;background:repeating-linear-gradient(180deg,rgba(255,207,110,.025) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:41;opacity:.07;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+/* 照準の矢印 */
+#reticle{position:fixed;left:0;top:0;width:44px;height:44px;margin:-22px 0 0 -22px;pointer-events:none;z-index:50;transition:width .25s,height .25s,margin .25s;display:none}
+#reticle i{position:absolute;width:10px;height:10px;border:1px solid var(--amber)}
+#reticle i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+#reticle i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+#reticle i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+#reticle i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+#reticle b{position:absolute;left:50%;top:50%;width:3px;height:3px;margin:-1.5px;background:var(--signal);border-radius:50%}
+#reticle.lock{width:64px;height:64px;margin:-32px 0 0 -32px}
+@media (pointer:fine){#reticle{display:block} body,a{cursor:none}}
+
+/* 上の帯 */
+.bar{position:fixed;z-index:20;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;padding:16px clamp(20px,4vw,56px);background:linear-gradient(180deg,rgba(3,7,15,.85),transparent)}
+.bar .mark{display:flex;align-items:center;gap:14px}
+.bar img{width:50px;height:50px;filter:drop-shadow(0 0 14px rgba(255,207,110,.25))}
+.bar .name{font-family:"Saira Stencil One",Michroma,sans-serif;font-size:27px;line-height:1;letter-spacing:.2em;color:transparent;background:linear-gradient(180deg,#ffffff 0%,#ffffff 46%,#e9ecef 54%,#ffffff 100%);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(1px 1px 0 #2a2a2a) drop-shadow(1px 1px 0 #141414) drop-shadow(1.5px 1.5px 0 #000)}
+@media (max-width:600px){.bar img{width:42px;height:42px}.bar .name{font-size:23px}}
+.bar nav{display:flex;gap:26px;font-size:13px;color:var(--haze)}
+.bar nav a:hover{color:var(--amber)}
+.sys{font-size:10px;color:var(--brass);opacity:.8}
+.sys .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--signal);margin-right:8px;animation:blink 1.4s steps(2) infinite}
+@keyframes blink{50%{opacity:.15}}
+
+/* 計器（ヒーロー） */
+.helm{position:relative;min-height:100svh;display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;padding:100px clamp(20px,4vw,56px) 60px;gap:clamp(20px,3vw,48px);overflow:hidden}
+.helm::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 68% 50%,rgba(212,171,82,.10) 0%,rgba(11,24,48,.7) 30%,transparent 65%);pointer-events:none}
+/* 遠近の床の格子 */
+.floor{position:absolute;left:-20%;right:-20%;bottom:-10%;height:46%;background-image:linear-gradient(rgba(212,171,82,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(212,171,82,.22) 1px,transparent 1px);background-size:70px 70px;transform:perspective(500px) rotateX(70deg);transform-origin:bottom;mask-image:linear-gradient(0deg,#000 0%,transparent 85%);-webkit-mask-image:linear-gradient(0deg,#000 0%,transparent 85%);animation:flow 6s linear infinite;pointer-events:none}
+@keyframes flow{to{background-position:0 70px}}
+.say{position:relative;z-index:2}
+.boot{font-size:11px;color:var(--brass);min-height:5.4em;margin-bottom:22px;white-space:pre-line}
+.say h1{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:clamp(40px,6vw,88px);line-height:1.12;margin:0 0 .45em;letter-spacing:.02em}
+.say h1 .ln{display:block;overflow:hidden}
+.say h1 .ln span{display:block;transform:translateY(105%);animation:rise 1.1s cubic-bezier(.2,.7,0,1) forwards;animation-delay:1.6s}
+.say h1 .ln:nth-child(2) span{animation-delay:1.78s}
+@keyframes rise{to{transform:none}}
+.say p{max-width:30em;color:#c8d0dc;margin:0;opacity:0;animation:fade 1s ease 2.3s forwards}
+@keyframes fade{to{opacity:1}}
+.scope{position:relative;z-index:1;aspect-ratio:1/1;width:100%;max-width:720px;justify-self:end;transition:transform .9s cubic-bezier(.2,.7,0,1);transform-style:preserve-3d}
+.scope canvas{width:100%;height:100%;display:block}
+
+/* 区切りの見出し（HUD の角括弧が描かれる） */
+section{padding:clamp(90px,12vw,150px) clamp(20px,4vw,56px);position:relative}
+.inner{max-width:1180px;margin:0 auto}
+.head{display:grid;grid-template-columns:240px 1fr;gap:40px;margin-bottom:56px;align-items:end}
+.head h2{position:relative;font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:clamp(28px,3.4vw,46px);margin:0;line-height:1.3;padding:10px 16px;justify-self:start}
+.head h2::before,.head h2::after{content:"";position:absolute;width:0;height:0;border:1px solid var(--amber);transition:width .7s cubic-bezier(.2,.7,0,1),height .7s cubic-bezier(.2,.7,0,1)}
+.head h2::before{left:0;top:0;border-right:0;border-bottom:0}
+.head h2::after{right:0;bottom:0;border-left:0;border-top:0}
+.seen .head h2::before,.seen .head h2::after{width:22px;height:22px}
+.head p{margin:0;color:var(--haze);max-width:34em}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity 1s,transform 1s cubic-bezier(.2,.7,0,1)}
+.seen .reveal{opacity:1;transform:none}
+
+/* 航路 */
+.course{list-style:none;margin:0;padding:0;border-top:1px solid var(--brass-dim)}
+.course li{position:relative;display:grid;grid-template-columns:240px 1fr 1.4fr;gap:40px;align-items:baseline;padding:32px 0;border-bottom:1px solid var(--brass-dim);overflow:hidden}
+.course li::before{content:"";position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(90deg,rgba(255,207,110,.10),transparent 60%);transform:translateX(-101%);transition:transform .6s cubic-bezier(.2,.7,0,1)}
+.course li:hover::before,.course li.on::before{transform:none}
+.course .brg{font-size:12px;color:var(--brass);position:relative}
+.course .brg i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--signal);margin-right:12px;box-shadow:0 0 0 4px rgba(225,38,45,.18),0 0 12px var(--signal);vertical-align:1px}
+.course h3{position:relative;font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:clamp(22px,2.4vw,30px);margin:0}
+.course p{position:relative;margin:0;color:var(--haze);font-size:15px}
+.go{color:var(--amber);border-bottom:1px solid var(--brass-dim)}
+
+/* 船団 */
+.fleet{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--brass-dim)}
+.ship{border-right:1px solid var(--brass-dim);padding:10px 34px 20px}
+.ship .num{font-family:Michroma,sans-serif;font-size:clamp(90px,13vw,190px);line-height:1;color:transparent;-webkit-text-stroke:1px var(--brass);display:block;margin-bottom:22px;transition:text-shadow .5s,-webkit-text-stroke-color .5s}
+.ship:hover .num{-webkit-text-stroke-color:var(--amber);text-shadow:0 0 28px rgba(255,207,110,.35)}
+.ship.white .num{-webkit-text-stroke:1px var(--foam)}
+.ship h3{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:21px;margin:0 0 6px}
+.ship p{margin:0;color:var(--haze);font-size:14px}
+
+/* 冒険家 */
+.voyager{display:grid;grid-template-columns:1fr 1fr;gap:clamp(30px,6vw,90px);align-items:center}
+.voyager figure{margin:0;position:relative;aspect-ratio:4/5;overflow:hidden}
+.voyager figure img{width:100%;height:100%;object-fit:cover;object-position:52% 50%;filter:saturate(.75) contrast(1.12) brightness(.85)}
+.voyager figure::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,15,0) 55%,rgba(3,7,15,.8)),radial-gradient(ellipse at 45% 40%,transparent 40%,rgba(3,7,15,.55))}
+.voyager .scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);box-shadow:0 0 18px var(--amber);opacity:.7;top:0;animation:scan 5s cubic-bezier(.5,0,.5,1) infinite;z-index:2}
+@keyframes scan{0%{top:0}50%{top:100%}100%{top:0}}
+.voyager .tag{position:absolute;z-index:3;left:16px;top:16px;font-size:10px;color:var(--amber)}
+.voyager figcaption{position:absolute;z-index:3;left:16px;bottom:14px;font-size:11px;color:var(--foam)}
+.voyager blockquote{font-family:"Shippori Mincho B1",serif;font-size:clamp(20px,2.2vw,28px);line-height:1.9;margin:0 0 28px}
+.who{color:var(--haze);font-size:14px;margin-bottom:34px}
+.link{display:inline-flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--brass);color:var(--foam)}
+.link svg{width:18px;height:18px;color:var(--amber);transition:transform .5s}
+.link:hover svg{transform:rotate(-30deg)}
+
+/* 信号 */
+.signals{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--brass-dim);border-bottom:1px solid var(--brass-dim)}
+.signals a{position:relative;padding:44px 26px;border-right:1px solid var(--brass-dim);display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.signals a:last-child{border-right:0}
+.signals a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--amber);box-shadow:0 0 14px var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.7,0,1)}
+.signals a:hover::after{transform:none}
+.signals b{font-family:Michroma,sans-serif;font-weight:400;font-size:13px;letter-spacing:.2em}
+.signals span{color:var(--haze);font-size:13px}
+
+/* 船籍 */
+dl.reg{display:grid;grid-template-columns:240px 1fr;margin:0;border-top:1px solid var(--brass-dim)}
+dl.reg dt,dl.reg dd{padding:18px 0;border-bottom:1px solid var(--brass-dim);margin:0}
+dl.reg dt{color:var(--brass);font-size:14px}
+.call{display:flex;gap:56px;flex-wrap:wrap;margin-top:60px}
+.call a{font-family:Michroma,sans-serif;font-size:clamp(22px,3vw,40px);letter-spacing:.06em;transition:color .3s,text-shadow .3s}
+.call a:hover{color:var(--amber);text-shadow:0 0 22px rgba(255,207,110,.4)}
+.call small{display:block;font-family:"Zen Kaku Gothic New",sans-serif;font-size:13px;color:var(--haze);letter-spacing:.04em;margin-bottom:6px}
+footer{padding:40px clamp(20px,4vw,56px);display:flex;justify-content:space-between;color:var(--haze);font-size:11px;border-top:1px solid var(--brass-dim)}
+
+@media (max-width:900px){
+  #warp{position:absolute;left:0;top:0;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;pointer-events:none;z-index:2;opacity:0;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,255,255,1) 0%,rgba(255,226,170,.85) 12%,rgba(255,190,90,.3) 32%,transparent 64%)}
+  .bar nav,.sys{display:none}
+  .helm{grid-template-columns:1fr;padding-top:90px}
+  .boot{font-size:9px;min-height:0}
+  .scope{justify-self:center;max-width:540px;order:-1}
+  .head,.course li,dl.reg{grid-template-columns:1fr;gap:8px}
+  .fleet,.voyager,.signals{grid-template-columns:1fr}
+  .fleet{border-left:0}
+  .ship{border-right:0;border-bottom:1px solid var(--brass-dim);padding:24px 0}
+  .signals a{border-right:0;border-bottom:1px solid var(--brass-dim)}
+  dl.reg dt{padding-bottom:0;border-bottom:0}
+}
+
+/* 食卓 */
+.menu{display:grid;grid-template-columns:1.3fr 1.3fr 1fr 1fr;border-top:1px solid var(--brass-dim);border-bottom:1px solid var(--brass-dim)}
+.dish{position:relative;padding:34px 28px 30px;border-right:1px solid var(--brass-dim)}
+.dish:last-child{border-right:0}
+.dish .k{font-size:10px;color:var(--brass)}
+.dish h3{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:clamp(22px,2.2vw,28px);margin:10px 0 12px}
+.dish .pr{font-family:"Zen Kaku Gothic New",sans-serif!important;font-size:14px;letter-spacing:.06em;margin:14px 0 0;color:var(--haze);white-space:nowrap;order:3}
+.dish .pr small{font-size:13px;margin-left:2px;color:var(--haze)}
+
+
+.dish{display:flex;flex-direction:column}.dish p{margin:0;font-size:15px;color:#c8d0dc}
+.notes{list-style:none;padding:0;margin:34px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:10px 40px}
+.notes li{position:relative;padding-left:22px;color:#c8d0dc;font-size:15px}
+.notes li::before{content:"";position:absolute;left:0;top:.75em;width:10px;height:1px;background:var(--amber);box-shadow:0 0 6px var(--amber)}
+.fine{font-size:12px;color:var(--haze);margin-top:22px}
+/* 船団のタブと案内 */
+.tabs{display:grid;grid-template-columns:repeat(3,1fr);border-left:1px solid var(--brass-dim)}
+.tabs button{all:unset;cursor:pointer;position:relative;border-right:1px solid var(--brass-dim);border-bottom:1px solid var(--brass-dim);padding:6px 28px 22px;display:flex;flex-direction:column;gap:2px}
+.tabs .num{font-family:Michroma,sans-serif;font-size:clamp(70px,9vw,140px);line-height:1;color:transparent;-webkit-text-stroke:1px var(--brass);transition:-webkit-text-stroke-color .4s,text-shadow .4s}
+.tabs .white .num{-webkit-text-stroke-color:var(--foam)}
+.tabs b{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:19px}
+.tabs small{color:var(--haze);font-size:13px}
+.tabs button::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--amber);box-shadow:0 0 14px var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.7,0,1)}
+.tabs button[aria-selected="true"]::after{transform:none}
+.tabs button[aria-selected="true"] .num,.tabs button:hover .num{-webkit-text-stroke-color:var(--amber);text-shadow:0 0 30px rgba(255,207,110,.35)}
+.tabs button:focus-visible{outline:1px solid var(--amber);outline-offset:-4px}
+.dossier{display:none;position:relative;padding:44px 0 10px}
+.dossier.on{display:block;animation:open .7s cubic-bezier(.2,.7,0,1)}
+@keyframes open{from{opacity:0;transform:translateY(14px);clip-path:inset(0 0 100% 0)}to{opacity:1;transform:none;clip-path:inset(0 0 0 0)}}
+.dossier::before{content:"";position:absolute;left:0;top:20px;width:24px;height:24px;border-left:1px solid var(--amber);border-top:1px solid var(--amber)}
+.tagline{font-family:"Shippori Mincho B1",serif;font-size:clamp(19px,2vw,25px);line-height:1.9;margin:0 0 34px;max-width:40em;padding-left:30px}
+.dgrid{display:grid;grid-template-columns:1.15fr 1.15fr .9fr;gap:44px}
+.blk h4{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:17px;color:var(--amber);margin:0 0 10px}
+.blk p{margin:0 0 26px;color:#c8d0dc;font-size:15px}
+.checks{list-style:none;margin:0;padding:0}
+.checks li{position:relative;padding:9px 0 9px 30px;border-bottom:1px dashed var(--brass-dim);font-size:15px;color:#d6dce5}
+.checks li::before{content:"";position:absolute;left:2px;top:15px;width:12px;height:12px;border:1px solid var(--amber)}
+.checks li::after{content:"";position:absolute;left:5px;top:16px;width:5px;height:8px;border-right:2px solid var(--amber);border-bottom:2px solid var(--amber);transform:rotate(40deg)}
+dl.info{margin:0;border:1px solid var(--brass-dim);padding:20px 22px;background:rgba(11,24,48,.45);align-self:start}
+dl.info dt{font-size:12px;color:var(--brass);margin-top:12px}
+dl.info dt:first-child{margin-top:0}
+dl.info dd{margin:2px 0 0;font-size:14.5px}
+dl.info a{color:var(--amber)}
+/* BASE */
+.basegrid{display:grid;grid-template-columns:1.2fr .8fr;gap:60px;align-items:center}
+.basegrid p{color:#c8d0dc;max-width:34em}
+.basehud{color:var(--amber);position:relative;max-width:300px;justify-self:center;filter:drop-shadow(0 0 10px rgba(255,207,110,.35))}
+.basehud svg{width:100%;animation:spin 40s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.basehud span{position:absolute;left:0;right:0;bottom:-30px;text-align:center;font-size:11px;color:var(--brass)}
+@media (max-width:900px){
+  .menu{grid-template-columns:1fr 1fr}.dish:nth-child(2){border-right:0}.dish{border-bottom:1px solid var(--brass-dim)}
+  .notes{grid-template-columns:1fr}
+  .tabs{grid-template-columns:1fr}.tabs button{flex-direction:row;align-items:center;gap:16px;padding:10px 16px}.tabs .num{font-size:54px}
+  .dgrid,.basegrid{grid-template-columns:1fr}
+}
+
+
+.clips{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.clip{display:flex;flex-direction:column;gap:6px}
+.clip .frame{position:relative;aspect-ratio:16/9;overflow:hidden;border:1px solid var(--brass-dim)}
+.clip img{width:100%;height:100%;object-fit:cover;filter:saturate(.6) brightness(.7);transition:filter .5s,transform .8s cubic-bezier(.2,.7,0,1)}
+.clip:hover img{filter:saturate(1) brightness(.9);transform:scale(1.04)}
+.clip .frame::before,.clip .frame::after{content:"";position:absolute;z-index:2;width:22px;height:22px;border:1px solid var(--amber)}
+.clip .frame::before{left:10px;top:10px;border-right:0;border-bottom:0}
+.clip .frame::after{right:10px;bottom:10px;border-left:0;border-top:0}
+.clip .play{position:absolute;z-index:2;left:50%;top:50%;width:64px;height:64px;margin:-32px;border:1px solid var(--amber);border-radius:50%;box-shadow:0 0 22px rgba(255,207,110,.35)}
+.clip .play::after{content:"";position:absolute;left:26px;top:21px;border-left:16px solid var(--amber);border-top:11px solid transparent;border-bottom:11px solid transparent}
+.clip em{position:absolute;z-index:2;right:14px;top:12px;font-style:normal;font-size:11px;color:var(--amber)}
+.clip b{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:20px;margin-top:10px}
+.clip span:last-child{color:var(--haze);font-size:13px}
+@media (max-width:900px){.clips{grid-template-columns:1fr}}
+
+
+.basephoto{position:relative;margin:0;aspect-ratio:4/3;overflow:hidden;border:1px solid var(--brass-dim)}
+.basephoto img{width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.08) brightness(.82)}
+.basephoto::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(3,7,15,0) 55%,rgba(3,7,15,.75))}
+.basephoto .scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--amber),transparent);box-shadow:0 0 18px var(--amber);opacity:.6;top:0;animation:scan 6s cubic-bezier(.5,0,.5,1) infinite;z-index:2}
+.basephoto .tag{position:absolute;z-index:3;left:14px;top:12px;font-size:10px;color:var(--amber)}
+.basephoto figcaption{position:absolute;z-index:3;left:16px;bottom:12px;font-size:13px;color:var(--foam)}
+
+.greet{color:#c8d0dc;margin:0 0 18px;max-width:34em}
+
+.medialog{list-style:none;margin:56px 0 0;padding:0;border-top:1px solid var(--brass-dim)}
+.medialog li{display:grid;grid-template-columns:200px 90px 1fr;gap:20px;padding:15px 0;border-bottom:1px solid var(--brass-dim);align-items:baseline;transition:background .3s}
+.medialog li:hover{background:linear-gradient(90deg,rgba(255,207,110,.07),transparent 60%)}
+.medialog .d{font-size:12px;color:var(--brass)}
+.medialog .m{font-size:11px;color:var(--amber);border:1px solid var(--brass-dim);padding:1px 8px;justify-self:start}
+.medialog .n{font-family:"Shippori Mincho B1",serif;font-size:17px}
+.medialog a{border-bottom:1px solid var(--brass-dim)}
+.medialog a:hover{color:var(--amber)}
+@media (max-width:900px){.medialog li{grid-template-columns:96px 1fr;}.medialog .n{grid-column:1/-1}}
+
+
+.access{display:grid;grid-template-columns:.85fr 1.15fr;gap:0;border:1px solid var(--brass-dim)}
+.places{display:flex;flex-direction:column}
+.places button{all:unset;cursor:pointer;position:relative;padding:22px 26px;border-bottom:1px solid var(--brass-dim);display:flex;flex-direction:column;gap:2px;transition:background .3s}
+.places button:last-child{border-bottom:0}
+.places button b{font-family:"Shippori Mincho B1",serif;font-weight:500;font-size:18px}
+.places button span{font-size:13px;color:var(--haze)}
+.places button .tel{color:var(--brass);font-size:12px}
+.places button::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber);box-shadow:0 0 12px var(--amber);transform:scaleY(0);transition:transform .4s}
+.places button[aria-selected="true"]{background:rgba(255,207,110,.06)}
+.places button[aria-selected="true"]::before{transform:none}
+.places button:focus-visible{outline:1px solid var(--amber);outline-offset:-3px}
+.map{position:relative;min-height:420px;border-left:1px solid var(--brass-dim);overflow:hidden}
+.map iframe{position:absolute;inset:0;width:100%;height:100%;border:0;filter:invert(.92) hue-rotate(185deg) saturate(.55) brightness(.9) contrast(1.05)}
+.map .corner{position:absolute;z-index:2;left:12px;top:12px;width:26px;height:26px;border-left:1px solid var(--amber);border-top:1px solid var(--amber);pointer-events:none}
+.map .open{position:absolute;z-index:2;right:12px;bottom:12px;font-size:10px;padding:8px 12px;background:rgba(3,7,15,.85);border:1px solid var(--brass);color:var(--amber)}
+.map .open:hover{background:var(--amber);color:var(--abyss)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:22px 28px;max-width:900px}
+.form .wide{grid-column:1/-1}
+.form .hp{display:none}
+.f{display:flex;flex-direction:column;gap:8px;min-width:0}.f input,.f select,.f textarea{width:100%;min-width:0}
+.f span{font-size:13px;color:var(--brass)}
+.f input,.f select,.f textarea{font:inherit;color:var(--foam);background:rgba(11,24,48,.5);border:1px solid var(--brass-dim);padding:13px 14px;border-radius:0;outline:none;transition:border-color .3s,box-shadow .3s}
+.f input:focus,.f select:focus,.f textarea:focus{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber),0 0 18px rgba(255,207,110,.18)}
+.f select option{background:var(--abyss)}
+.note{font-size:12px;color:var(--haze);margin:0}
+.send{all:unset;cursor:pointer;justify-self:start;display:inline-flex;align-items:center;gap:12px;padding:16px 34px;border:1px solid var(--amber);color:var(--amber);font-size:13px;letter-spacing:.3em;transition:background .3s,color .3s,box-shadow .3s}
+.send svg{width:18px;height:18px}
+.send:hover,.send:focus-visible{background:var(--amber);color:var(--abyss);box-shadow:0 0 28px rgba(255,207,110,.4)}
+@media (max-width:900px){.access{grid-template-columns:1fr}.map{border-left:0;border-top:1px solid var(--brass-dim);min-height:320px}.form{grid-template-columns:1fr}}
+
+
+/* 宇宙 */
+#space{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+main,header,footer{position:relative;z-index:2}
+.bar{z-index:20}
+body{background:radial-gradient(ellipse 80% 60% at 75% 10%,rgba(40,60,120,.28),transparent 60%),radial-gradient(ellipse 60% 50% at 10% 80%,rgba(120,80,30,.16),transparent 60%),#010309}
+.helm{overflow:visible}
+.helm::before{background:radial-gradient(ellipse at 68% 46%,rgba(255,207,110,.08) 0%,transparent 55%)}
+/* 大地（ERETZ＝大地）の弧と夜明け */
+.planet{position:absolute;left:50%;width:260vw;height:260vw;bottom:calc(-260vw + 26vh);transform:translateX(-50%);border-radius:50%;pointer-events:none;z-index:0;
+ background:radial-gradient(circle at 50% 0%,#0c1a33 0%,#050b18 18%,#02050c 40%);
+ box-shadow:0 -2px 0 rgba(255,214,140,.55),0 -14px 40px rgba(255,190,90,.35),0 -60px 140px rgba(70,120,255,.28),inset 0 30px 80px rgba(120,170,255,.18);animation:rise2 3.2s cubic-bezier(.2,.7,0,1) both}
+@keyframes rise2{from{transform:translate(-50%,18vh);opacity:0}to{transform:translateX(-50%);opacity:1}}
+.planet .city{position:absolute;inset:0;border-radius:50%;opacity:.55;background-image:radial-gradient(1.2px 1.2px at 20% 2%,#ffd58a 50%,transparent 51%),radial-gradient(1px 1px at 35% 1.4%,#ffd58a 50%,transparent 51%),radial-gradient(1.4px 1.4px at 48% 1.1%,#ffe2a8 50%,transparent 51%),radial-gradient(1px 1px at 52% 1.6%,#ffd58a 50%,transparent 51%),radial-gradient(1.1px 1.1px at 61% 2.2%,#ffd58a 50%,transparent 51%),radial-gradient(1px 1px at 70% 3%,#ffd58a 50%,transparent 51%);animation:spinp 240s linear infinite}
+@keyframes spinp{to{transform:rotate(360deg)}}
+.flare{position:absolute;left:50%;bottom:24vh;width:60vw;height:2px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,rgba(255,220,150,.9),transparent);filter:blur(1px);box-shadow:0 0 40px 10px rgba(255,190,90,.25);opacity:0;animation:fl 2.4s 1.2s ease forwards;pointer-events:none}
+@keyframes fl{to{opacity:.85}}
+.say,.scope{z-index:3}
+/* 見出しの文字が解読されて現れる */
+.head h2 .gl{display:inline-block}
+
+
+#ping{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:45}
+.depth{position:fixed;z-index:30;right:18px;top:50%;transform:translateY(-50%);height:46vh;width:2px;background:var(--brass-dim)}
+.depth i{position:absolute;left:-1px;top:0;width:4px;height:0;background:var(--amber);box-shadow:0 0 12px var(--amber)}
+.depth .dv,.depth .dn{position:absolute;right:12px;font-size:9px;color:var(--brass);white-space:nowrap}
+.depth .dv{top:-18px}.depth .dn{bottom:-18px;color:var(--amber)}
+.holo{position:relative;overflow:hidden;transition:transform .5s cubic-bezier(.2,.7,0,1)}
+.holo::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .4s;background:radial-gradient(220px circle at var(--hx,50%) var(--hy,50%),rgba(255,207,110,.16),transparent 60%),linear-gradient(115deg,transparent 30%,rgba(255,255,255,.05) 45%,transparent 60%)}
+.holo:hover::after{opacity:1}
+@media (max-width:900px){.depth{display:none}}
+
+
+/* 空をゆく黒船 */
+#ship{position:absolute;left:0;top:0;width:min(640px,58vw);z-index:2;pointer-events:none;will-change:transform,filter;transform-origin:50% 50%;opacity:0}
+#ship img{width:100%;display:block;filter:grayscale(.85) sepia(.18) brightness(.8) contrast(1.2) drop-shadow(0 -6px 18px rgba(255,200,120,.3)) drop-shadow(0 20px 40px rgba(0,0,0,.85))}
+/* 噴射：ノズルの白熱 → 青白い光の尾 → 衝撃波の節（炎ではなく光） */
+#ship .thr{position:absolute;pointer-events:none;mix-blend-mode:screen;border-radius:50%;transform-origin:100% 50%;transform:rotate(var(--ta,0deg)) scaleX(var(--pw,1));background:radial-gradient(ellipse 100% 50% at 100% 50%,rgba(255,255,255,.95) 0,rgba(205,236,255,.85) 9%,rgba(125,188,255,.5) 30%,rgba(70,120,255,.16) 62%,transparent 100%);filter:blur(1.5px);animation:flk .07s steps(2) infinite alternate}
+#ship .thr b{position:absolute;right:0;top:34%;width:58%;height:32%;border-radius:50%;transform-origin:100% 50%;background:radial-gradient(ellipse 100% 50% at 100% 50%,#fff 0,rgba(240,252,255,.95) 30%,rgba(175,222,255,.45) 65%,transparent 100%);animation:core .11s ease-in-out infinite alternate}
+#ship .thr::after{content:"";position:absolute;right:6%;top:41%;width:62%;height:18%;border-radius:50%;background:repeating-linear-gradient(90deg,transparent 0 12%,rgba(255,255,255,.7) 15%,transparent 18%);-webkit-mask-image:linear-gradient(to left,#000 20%,transparent);mask-image:linear-gradient(to left,#000 20%,transparent)}
+#ship .thr::before{content:"";position:absolute;right:0;top:50%;height:190%;aspect-ratio:1;border-radius:50%;transform:translate(45%,-50%);background:radial-gradient(circle,#fff 0,rgba(210,238,255,.85) 16%,rgba(120,180,255,.28) 42%,transparent 70%)}
+#ship .thr{filter:blur(1px) drop-shadow(0 0 10px rgba(130,195,255,.95)) drop-shadow(0 0 26px rgba(90,150,255,.6))}
+#ship .t1{left:-42%;top:66.5%;width:58%;height:16%;--ta:0deg}
+#ship .t2{left:-15%;top:53%;width:48%;height:13%;--ta:0deg;animation-delay:-.03s}
+@keyframes flk{from{opacity:.8}to{opacity:1}}
+@keyframes core{from{transform:scaleX(.86)}to{transform:scaleX(1.06)}}
+#ship .streak{display:none}
+#ship.fast .streak{opacity:.9}}
+#wake{position:fixed;inset:0;width:100%;height:100%;z-index:3;pointer-events:none}
+
+#warp{position:absolute;left:0;top:0;width:220px;height:220px;margin:-110px 0 0 -110px;border-radius:50%;pointer-events:none;z-index:2;opacity:0;mix-blend-mode:screen;background:radial-gradient(circle,rgba(255,255,255,1) 0%,rgba(255,226,170,.85) 12%,rgba(255,190,90,.3) 32%,transparent 64%)}
+#warp::after{content:"";position:absolute;left:-200%;right:-200%;top:50%;height:2px;margin-top:-1px;background:linear-gradient(90deg,transparent,rgba(255,226,170,.9),#fff,rgba(255,226,170,.9),transparent)}
+#warp::before{content:"";position:absolute;left:50%;top:-70%;bottom:-70%;width:2px;margin-left:-1px;background:linear-gradient(transparent,rgba(205,236,255,.8),#fff,rgba(205,236,255,.8),transparent)}
+#warp.go{animation:warpf .55s cubic-bezier(.2,.7,0,1)}
+@keyframes warpf{0%{opacity:1;transform:scale(.2)}35%{opacity:1;transform:scale(1.15)}100%{opacity:0;transform:scale(1.9)}}
+
+/* ===== ギミック頂点 ===== */
+/* 起動：画面が点く（ブラウン管の一本線が開く） */
+#power{position:fixed;inset:0;z-index:90;pointer-events:none;background:#010309;animation:pwoff .5s .85s ease forwards}
+#power::before{content:"";position:absolute;left:0;right:0;top:50%;height:2px;margin-top:-1px;background:#fff;box-shadow:0 0 30px 6px rgba(255,207,110,.8);transform:scaleX(0);animation:pwline .45s cubic-bezier(.2,.7,0,1) forwards,pwopen .4s .45s cubic-bezier(.7,0,.3,1) forwards}
+#power::after{content:"ERETZ NAV  —  POWER ON";position:absolute;left:50%;top:calc(50% + 18px);transform:translateX(-50%);font:10px Michroma,sans-serif;letter-spacing:.4em;color:var(--amber);opacity:0;animation:pwtx .5s .15s steps(4) forwards}
+@keyframes pwline{to{transform:scaleX(1)}}
+@keyframes pwopen{to{top:0;height:100%;margin-top:0;opacity:0}}
+@keyframes pwtx{50%{opacity:1}to{opacity:0}}
+@keyframes pwoff{to{opacity:0;visibility:hidden}}
+/* 画面の四隅の HUD と遠隔計測 */
+.hudf{position:fixed;inset:14px;z-index:35;pointer-events:none}
+.hudf i{position:absolute;width:26px;height:26px;border:1px solid rgba(212,171,82,.55)}
+.hudf i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.hudf i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.hudf i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.hudf i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.tele{position:fixed;z-index:35;left:22px;bottom:24px;font-size:9px;line-height:1.7;color:var(--brass);opacity:.65;pointer-events:none;white-space:pre;display:none}
+@media (min-width:1300px){.tele{display:block}}
+@media (max-width:900px){.hudf{inset:8px}.hudf i{width:16px;height:16px}}
+/* カーソルの光と座標 */
+#glowc{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;border-radius:50%;pointer-events:none;z-index:1;background:radial-gradient(circle,rgba(255,207,110,.07),rgba(90,130,255,.03) 40%,transparent 70%);display:none}
+@media (pointer:fine){#glowc{display:block}}
+#reticle .rc{position:absolute;left:52px;top:-4px;font:8px Michroma,sans-serif;letter-spacing:.12em;color:var(--brass);white-space:nowrap;opacity:.8}
+#reticle.lock .rc{left:72px;color:var(--amber)}
+/* 節の走査（計器の読み込み） */
+.sector{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;overflow:hidden;z-index:0}
+.sector .sl{position:absolute;left:0;right:0;top:-2px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,207,110,.85) 20%,#fff 50%,rgba(255,207,110,.85) 80%,transparent);box-shadow:0 0 22px rgba(255,207,110,.7);opacity:0}
+.sector .sl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:120px;background:linear-gradient(0deg,rgba(255,207,110,.08),transparent)}
+.seen > .sector .sl{animation:sweepd 1.5s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes sweepd{0%{top:-2px;opacity:1}85%{opacity:1}100%{top:100%;opacity:0}}
+.sector .lb{position:absolute;top:clamp(34px,5vw,54px);left:max(clamp(20px,4vw,56px),calc(50% - 590px));font-size:9px;color:var(--brass);opacity:.75;white-space:nowrap}
+.sector .lb b{font-weight:400;color:var(--amber)}
+section > .inner{position:relative;z-index:1}
+/* 見出しのグリッチ */
+.say h1{transition:text-shadow .3s}
+.say h1:hover{text-shadow:2px 0 rgba(225,38,45,.7),-2px 0 rgba(90,170,255,.7);animation:jit .28s steps(3) 1}
+@keyframes jit{0%{transform:translateX(-3px)}33%{transform:translateX(3px) skewX(-6deg)}66%{transform:translateX(-1px)}100%{transform:none}}
+
+/* BASE：屋上の映写 */
+.basesec .head{margin-bottom:34px}
+.stage{position:relative;aspect-ratio:16/9;max-height:min(70vh,640px);width:100%;overflow:hidden;background:#000;border:1px solid var(--brass-dim);isolation:isolate}
+.stage .sl{position:absolute;inset:0;margin:0;opacity:0;clip-path:inset(0 0 100% 0);transition:opacity 1.2s ease,clip-path 1.2s cubic-bezier(.7,0,.2,1)}
+.stage .sl.on{opacity:1;clip-path:inset(0 0 0 0);z-index:1}
+.stage .sl img{width:100%;height:100%;object-fit:cover;transform:scale(1.14);filter:saturate(1.08) contrast(1.06)}
+.stage .sl.on img{animation:kb 8s cubic-bezier(.2,.4,.3,1) forwards}
+@keyframes kb{from{transform:scale(1.14) translate(var(--kx,1%),var(--ky,1%))}to{transform:scale(1.02) translate(0,0)}}
+.stage::before{content:"";position:absolute;inset:0;z-index:3;pointer-events:none;background:radial-gradient(ellipse at 50% 45%,transparent 45%,rgba(1,3,9,.7)),linear-gradient(180deg,rgba(1,3,9,.45),transparent 22%,transparent 62%,rgba(1,3,9,.88));}
+.stage::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(180deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);mix-blend-mode:overlay}
+.stage .glint{position:absolute;z-index:5;top:-20%;bottom:-20%;width:22%;left:-30%;pointer-events:none;background:linear-gradient(100deg,transparent,rgba(255,236,200,.16) 45%,rgba(255,255,255,.28) 50%,rgba(255,236,200,.16) 55%,transparent);transform:skewX(-14deg);mix-blend-mode:screen;animation:gl 7s 2s cubic-bezier(.5,0,.3,1) infinite}
+@keyframes gl{0%{left:-30%}35%,100%{left:120%}}
+#petals{position:absolute;inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
+.stage .hud{position:absolute;inset:0;z-index:7;pointer-events:none}
+.stage .hud .c{position:absolute;width:30px;height:30px;border:1px solid var(--amber);filter:drop-shadow(0 0 6px rgba(255,207,110,.6))}
+.stage .hud .c1{left:16px;top:16px;border-right:0;border-bottom:0}.stage .hud .c2{right:16px;top:16px;border-left:0;border-bottom:0}
+.stage .hud .c3{left:16px;bottom:16px;border-right:0;border-top:0}.stage .hud .c4{right:16px;bottom:16px;border-left:0;border-top:0}
+.stage .hud .tl{position:absolute;left:30px;top:26px;font-size:10px;color:var(--amber)}
+.stage .hud .tr{position:absolute;right:30px;top:26px;font-size:10px;color:var(--foam)}
+.stage .hud .tr i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--signal);margin-right:8px;box-shadow:0 0 10px var(--signal);animation:blink 1.2s steps(2) infinite}
+.stage .cap{position:absolute;z-index:8;left:clamp(26px,4vw,52px);bottom:clamp(30px,4.5vw,58px);right:clamp(26px,4vw,52px);pointer-events:none}
+.stage .cap small{display:block;font-size:10px;color:var(--amber);margin-bottom:8px}
+.stage .cap b{display:block;font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:clamp(22px,3.2vw,46px);white-space:nowrap;line-height:1.25;text-shadow:0 2px 24px rgba(0,0,0,.8)}
+.stage .cap br.m{display:none}
+.stage .cap b.in{animation:capin .9s cubic-bezier(.2,.7,0,1)}
+@keyframes capin{from{opacity:0;letter-spacing:.3em;filter:blur(6px)}to{opacity:1;letter-spacing:.02em;filter:none}}
+.stage .prog{position:absolute;z-index:8;left:0;bottom:0;height:2px;width:0;background:var(--amber);box-shadow:0 0 12px var(--amber)}
+.stage .prog.run{animation:prog 6.5s linear forwards}
+@keyframes prog{to{width:100%}}
+.rail{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--brass-dim);border-top:0}
+.rail button{all:unset;cursor:pointer;position:relative;display:grid;grid-template-columns:86px 1fr;gap:14px;align-items:center;padding:12px 14px;border-right:1px solid var(--brass-dim);transition:background .3s}
+.rail button:last-child{border-right:0}
+.rail img{width:86px;height:54px;object-fit:cover;filter:saturate(.4) brightness(.6);transition:filter .4s}
+.rail span{display:flex;flex-direction:column;font-size:13px;line-height:1.5}
+.rail span em{font-style:normal;font-size:9px;color:var(--brass)}
+.rail button::before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--amber);box-shadow:0 0 12px var(--amber);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.7,0,1)}
+.rail button[aria-selected="true"]{background:rgba(255,207,110,.06)}
+.rail button[aria-selected="true"]::before{transform:none}
+.rail button[aria-selected="true"] img,.rail button:hover img{filter:none}
+.rail button:focus-visible{outline:1px solid var(--amber);outline-offset:-3px}
+.basetext{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(24px,5vw,70px);margin-top:54px;align-items:start}
+.basetext .tagline{padding-left:0;margin:0}
+.basetext p{color:#c8d0dc;margin:0 0 16px}
+@media (max-width:900px){
+  .stage{aspect-ratio:4/5;max-height:none}
+  .stage .cap b{font-size:24px}
+  .stage .cap br.m{display:inline}
+  .stage .hud #camt{display:none}
+  .rail span{white-space:nowrap;font-size:11.5px}
+  #voyager .route{display:none}
+  .kfm .id{font-size:8px;left:12px;bottom:10px}
+  .rail{grid-template-columns:1fr 1fr}.rail button:nth-child(2){border-right:0}.rail button:nth-child(-n+2){border-bottom:1px solid var(--brass-dim)}
+  .rail button{grid-template-columns:56px 1fr;gap:10px;padding:10px}.rail img{width:56px;height:42px}.rail span{font-size:12px}
+  .basetext{grid-template-columns:1fr}
+}
+
+/* クロフネマン：闇から現れる */
+.kfm{display:grid;grid-template-columns:1.25fr .75fr;gap:clamp(26px,5vw,70px);align-items:center;margin-bottom:64px}
+.kfm figure{position:relative;margin:0;aspect-ratio:4/3;overflow:hidden;background:#000;border:1px solid rgba(225,38,45,.35)}
+.kfm figure img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;filter:brightness(.2) contrast(1.3)}
+.seen .kfm figure img.base{animation:kfmin 2.6s .6s cubic-bezier(.2,.7,0,1) forwards}
+@keyframes kfmin{0%{opacity:0}8%{opacity:.8;filter:brightness(1.6) contrast(1.4)}12%{opacity:.1}20%{opacity:.9;filter:brightness(.4) contrast(1.3)}100%{opacity:1;filter:brightness(1.18) contrast(1.1) saturate(1.1)}}
+.kfm figure img.r,.kfm figure img.b{mix-blend-mode:screen}
+.seen .kfm figure img.r{animation:rgbr 1.3s .7s steps(6) forwards}
+.seen .kfm figure img.b{animation:rgbb 1.3s .7s steps(6) forwards}
+@keyframes rgbr{0%{opacity:.7;filter:brightness(.8) sepia(1) saturate(8) hue-rotate(-50deg);transform:translate(-8px,0)}70%{opacity:.5;transform:translate(6px,1px)}100%{opacity:0;transform:none}}
+@keyframes rgbb{0%{opacity:.6;filter:brightness(.8) sepia(1) saturate(8) hue-rotate(170deg);transform:translate(8px,0)}70%{opacity:.4;transform:translate(-5px,-1px)}100%{opacity:0;transform:none}}
+.kfm .visor{position:absolute;left:-10%;right:-10%;top:var(--vy,26%);height:2px;margin-top:-1px;z-index:3;background:linear-gradient(90deg,transparent,rgba(255,40,50,.9),#fff,rgba(255,40,50,.9),transparent);box-shadow:0 0 30px 8px rgba(225,38,45,.6);opacity:0;transform:scaleX(0)}
+.seen .kfm .visor{animation:visor 1.1s .2s cubic-bezier(.2,.7,0,1) forwards}
+@keyframes visor{0%{opacity:1;transform:scaleX(0)}45%{opacity:1;transform:scaleX(1)}100%{opacity:0;transform:scaleX(1) scaleY(.2)}}
+.kfm .eye{position:absolute;z-index:2;left:var(--vx,74%);top:var(--vy,26%);width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(255,50,50,.35),rgba(225,38,45,.12) 35%,transparent 65%);mix-blend-mode:screen;opacity:0}
+.seen .kfm .eye{animation:eye 3.2s 3s ease-in-out infinite}
+@keyframes eye{0%,100%{opacity:.25}50%{opacity:.9}}
+.kfm figure::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(180deg,rgba(1,3,9,.15),transparent 30%,transparent 60%,rgba(1,3,9,.85)),repeating-linear-gradient(180deg,rgba(255,40,50,.05) 0 1px,transparent 1px 3px)}
+.kfm .id{position:absolute;z-index:5;left:18px;bottom:16px;font-size:10px;line-height:1.9;color:#ff6a6f;white-space:pre;min-height:5.7em}
+.kfm .tagk{position:absolute;z-index:5;left:18px;top:14px;font-size:10px;color:#ff6a6f}
+.kfm .tagk i{display:inline-block;width:7px;height:7px;background:var(--signal);margin-right:8px;box-shadow:0 0 10px var(--signal);animation:blink .9s steps(2) infinite}
+.kfm .logo{width:min(360px,100%);display:block;margin:0 0 26px;filter:drop-shadow(0 8px 30px rgba(0,0,0,.6))}
+.kfm h3{font-family:"Shippori Mincho B1",serif;font-weight:800;font-size:clamp(24px,2.8vw,38px);line-height:1.45;margin:0 0 18px}
+.kfm p{color:#c8d0dc;margin:0 0 14px}
+.kfm .aff{font-size:10px;color:var(--brass);margin-top:22px;border-top:1px solid var(--brass-dim);padding-top:14px}
+@media (max-width:900px){.kfm{grid-template-columns:1fr}.kfm .logo{width:min(280px,80%)}}
+
+/* 冒険家：地球儀と航路 */
+.voyager figure .globe{position:absolute;z-index:3;right:12px;top:22px;width:32%;aspect-ratio:1;pointer-events:none}
+.voyager figure .globe canvas{width:100%;height:100%;display:block}
+.voyager figure .globe span{position:absolute;right:0;bottom:-14px;font-size:8px;color:var(--amber);white-space:nowrap}
+#voyager{overflow:hidden}
+#voyager .route{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.26}
+
+@media (prefers-reduced-motion:reduce){#ship{display:none}#power{display:none}.stage .sl img{transform:none}.kfm figure img.base{opacity:1;filter:brightness(1.18) contrast(1.1)}}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .say h1 .ln span{transform:none}.say p{opacity:1}.reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<canvas id="space" aria-hidden="true"></canvas>
+<canvas id="ping" aria-hidden="true"></canvas>
+
+
+<nav class="depth" aria-label="ページの位置"><span class="lat dv" id="dv">000</span><i id="dbar"></i><span class="lat dn" id="dn">HELM</span></nav>
+<div id="reticle" aria-hidden="true"><i></i><i></i><i></i><i></i><b></b><span class="rc lat" id="rc"></span></div>
+<div id="power" aria-hidden="true"></div>
+<div id="glowc" aria-hidden="true"></div>
+<div class="hudf" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<div class="tele lat" id="tele" aria-hidden="true"></div>
+
+<header class="bar">
+  <a class="mark" href="#top"><img src="/img/emblem.png" alt=""><span class="name lat">ERETZ</span></a>
+  <span class="sys lat"><span class="dot"></span><span id="clock">KOKURA 00:00:00</span></span>
+  <nav><a href="#course">航路</a><a href="#fleet">デイサービス</a><a href="#table">食卓</a><a href="#base">BASE</a><a href="#voyager">冒険家</a><a href="#media">取材</a><a href="#signals">クロフネマン</a><a href="#access">アクセス</a><a href="#contact">お問い合わせ</a><a href="#registry">会社概要</a></nav>
+</header>
+
+<main id="top">
+<div class="helm">
+  <div class="planet" aria-hidden="true"><i class="city"></i></div><div class="flare" aria-hidden="true"></div>
+  <i id="warp" aria-hidden="true"></i><div id="ship" aria-hidden="true"><i class="streak"></i><img src="/img/kurofune_ship.png" alt=""><i class="thr t1"><b></b></i><i class="thr t2"><b></b></i></div>
+  <div class="say">
+    <div class="boot lat" id="boot" aria-hidden="true"></div>
+    <h1><span class="ln"><span>まだ海図に</span></span><span class="ln"><span>ない航路を。</span></span></h1>
+    <p>エレツ株式会社は、北九州・小倉南区から数えきれない航路を走らせています。福祉、KUROFUNEMAN PROJECT、デザイン／コンサル、そして衣食住。現場で磨いた力を、次の海へ。</p>
+  </div>
+  <div class="scope" aria-hidden="true"><canvas id="hud"></canvas></div>
+</div>
+
+<section id="course">
+  <div class="inner">
+    <div class="head"><h2>航路</h2><p class="reveal">計器に映る点の数だけ、事業があります。大きく分けると4つの海です。</p></div>
+    <ul class="course reveal" id="list">
+      <li data-i="0"><span class="brg lat"><i></i>045°</span><h3>福祉</h3><p>黒船デイサービス・白船デイサービスと、暮らしの拠点 KUROFUNE BASE。 <a class="go" href="#fleet">船団を見る</a>　<a class="go" href="#table">食卓を見る</a></p></li>
+      <li data-i="1"><span class="brg lat"><i></i>135°</span><h3>KUROFUNEMAN PROJECT</h3><p>企画。イベント、キャラクター、制作。北九州のヒーロー クロフネマンを軸に。 <a class="go" href="https://kurofuneman.jp" target="_blank" rel="noopener">クロフネマン公式</a></p></li>
+      <li data-i="2"><span class="brg lat"><i></i>225°</span><h3>デザイン／コンサル</h3><p>ホームページなどのウェブデザイン、ロゴや印刷物のデザイン。経営の相談から M&amp;A の交渉まで、AI と発信も。自社で動かしてきた仕組みを、あなたの会社へ。</p></li>
+      <li data-i="3"><span class="brg lat"><i></i>315°</span><h3>衣食住</h3><p>着る、食べる、住まう。衣は、服づくりと特別な衣装のデザイン。クロフネマンのロングコートや特殊部隊の衣装、クルー（隊員）たちの制服も手がけています。住まいは、エレツが管理する賃貸の基地 KUROFUNE BASE と、グループの不動産会社 HEADS株式会社が運営するハウスドゥ 福津。 <a class="go" href="#base">KUROFUNE BASE を見る</a>　<a class="go" href="https://fukutsu-housedo.com/" target="_blank" rel="noopener">ハウスドゥ 福津</a></p></li>
+    </ul>
+  </div>
+</section>
+
+<section id="fleet">
+  <div class="inner">
+    <div class="head"><h2>船団</h2><p class="reveal">北九州・小倉南区の3つのデイサービス。船ごとに、得意な航海が違います。船を選ぶと、くわしい案内が開きます。</p></div>
+    <div class="tabs reveal" role="tablist">
+      <button class="holo" role="tab" aria-selected="true" data-s="0"><span class="num">4</span><b>黒船デイサービス4号</b><small>少人数・大人の時間</small></button>
+      <button class="holo" role="tab" aria-selected="false" data-s="1"><span class="num">3</span><b>黒船デイサービス3号</b><small>科学的なトレーニング</small></button>
+      <button role="tab" aria-selected="false" data-s="2" class="white holo"><span class="num">1</span><b>白船デイサービス1号</b><small>毎日がお出掛け航海</small></button>
+    </div>
+
+    <article class="dossier on" data-s="0">
+      <p class="tagline">サロンの雰囲気で、紳士・淑女のおもてなしを。一日最大15名様の、少人数で落ち着いた船です。</p>
+      <div class="dgrid">
+        <div class="blk"><h4>特徴</h4><ul class="checks"><li>大人向けの、落ち着いた所で過ごしたい方に</li><li>一日最大15名様。少人数だからできるサービス</li><li>作業療法士による、完全に個別の機能訓練</li><li>プロ講師の教室（ピアノ・パソコン・押し花・園芸など）</li><li>お風呂はお一人ずつ。クルーがお手伝いします</li></ul></div>
+        <div class="blk"><h4>機能訓練</h4><p>「料理がしたい」「畑仕事がしたい」「孫と出かけたい」。その方にとって価値のあることに目を向け、計画を一人ずつ立てます。「してもらう」リハビリから、「やりたい」リハビリへ。</p><h4>お食事</h4><p>オープンキッチンで、見える所で栄養士たちが調理します。黒船ランチ 900円・赤船ランチ 1,400円・モーニング 500円・夕食のお弁当 700円。</p><h4>お風呂</h4><p>お一人ずつの入浴です。</p><h4>送迎</h4><p>電気自動車の普通車（4名乗り）が中心。エンジンの振動がなく、静かで快適です。</p></div>
+        <dl class="info"><dt>種別・定員</dt><dd>地域密着型通所介護　15名</dd><dt>営業日</dt><dd>月曜〜金曜</dd><dt>営業時間</dt><dd>8:30〜17:00</dd><dt>定休日</dt><dd>土曜・日曜、12月31日〜1月2日</dd><dt>所在地</dt><dd>北九州市小倉南区横代東町2-4-28</dd><dt>電話</dt><dd><a href="tel:0939813772">093-981-3772</a></dd></dl>
+      </div>
+    </article>
+    <article class="dossier" data-s="1">
+      <p class="tagline">「人の力には限りがある。リハビリマシンと科学的なプログラムで、理念を実現する」。4号に異を唱えて生まれた、トレーニングの船です。</p>
+      <div class="dgrid">
+        <div class="blk"><h4>特徴</h4><ul class="checks"><li>介護施設と感じさせない外観。白と黒で統一した、カフェやジムのような空間</li><li>作業療法士などの専門職が、運動プログラムを作ります</li><li>パーソナルトレーナーが、マシントレーニングとインナーマッスルまで</li><li>お風呂は、ゆったりとした個浴</li><li>手芸・お花・工作など、充実したレクリエーション</li><li>朝食・昼食・夕食まで対応</li></ul></div>
+        <div class="blk"><h4>機能訓練</h4><p>障害や後遺症のある体の部位に着目し、基本動作の回復・維持と悪化の予防、運動機能の回復をめざします。トレーニングの成果はグラフにして、目に見える形でお伝えします。</p><h4>お食事</h4><p>栄養士たちが食材とメニューを管理して調理します。黒船ランチ 900円・赤船ランチ 1,400円・モーニング 500円（和食・洋食）・夕食のお弁当。</p><h4>お風呂</h4><p>プライベートを守る、ゆったりとした個浴です。</p><h4>送迎</h4><p>主に電気自動車で、振動がなく静かなドライブです。</p></div>
+        <dl class="info"><dt>種別・定員</dt><dd>通所介護　29名</dd><dt>営業日</dt><dd>月曜〜金曜</dd><dt>営業時間</dt><dd>8:30〜17:00</dd><dt>定休日</dt><dd>土曜・日曜、12月31日〜1月2日</dd><dt>所在地</dt><dd>北九州市小倉南区横代東町2-5-2</dd><dt>電話</dt><dd><a href="tel:0939679663">093-967-9663</a></dd></dl>
+      </div>
+    </article>
+    <article class="dossier" data-s="2">
+      <p class="tagline">飾らず、自然体で。認知症の方や、介護度の重い方にもおすすめの船です。デイサービスに行きたがらない男性にも好まれています。</p>
+      <div class="dgrid">
+        <div class="blk"><h4>特徴</h4><ul class="checks"><li>短時間のリハビリ特化型でも、一日型でも</li><li>毎日がお出掛け航海。必要な物を自分の目で見て買う、買物ツアー</li><li>理学療法士がいます。リハビリマシンも複数台、ウォーターベッドが人気</li><li>特殊浴槽と福祉車両。車いすの方も安心</li><li>保育園を併設。園児たちと定期的に交流しています</li></ul></div>
+        <div class="blk"><h4>機能訓練</h4><p>理学療法士とリハビリマシンで、生活に結びつくリハビリを。買物ツアーで、実際に歩く練習やお金の管理の練習もできます。</p><h4>お食事</h4><p>白船ランチ 600円。飲み物・ランチ・デザートが付きます。</p><h4>お風呂</h4><p>特殊浴槽と個浴。介護度の重い方も、安全に入浴できます。</p><h4>送迎</h4><p>福祉車両があるので、車いすの方も安心です。</p></div>
+        <dl class="info"><dt>種別・定員</dt><dd>通所介護　37名</dd><dt>営業日</dt><dd>月曜〜金曜</dd><dt>営業時間</dt><dd>8:30〜17:00</dd><dt>定休日</dt><dd>土曜・日曜、12月31日〜1月2日</dd><dt>所在地</dt><dd>北九州市小倉南区沼本町1-9-37</dd><dt>電話</dt><dd><a href="tel:0933838879">093-383-8879</a></dd></dl>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section id="table">
+  <div class="inner">
+    <div class="head"><h2>食卓</h2><p class="reveal">いちばん喜ばれているのは、お食事です。黒船デイサービス4号・3号では、地元の食材を栄養士たちが一日の栄養とバランスを考えて仕立てます。レストランに来た気分で。</p></div>
+    <div class="menu reveal">
+      <div class="dish main holo"><span class="lat k">LUNCH</span><h3>黒船ランチ</h3><p>毎日のランチ。地産地消のこだわり食材で。</p><p class="pr">900<small>円</small></p></div>
+      <div class="dish main red holo"><span class="lat k">SPECIAL</span><h3>赤船ランチ</h3><p>特別な日のランチ。営業日の3日前までにご予約を。</p><p class="pr">1,400<small>円</small></p></div>
+      <div class="dish holo"><span class="lat k">MORNING</span><h3>モーニング</h3><p>和食と洋食から選べます。</p><p class="pr">500<small>円</small></p></div>
+      <div class="dish holo"><span class="lat k">TAKE HOME</span><h3>夕食のお弁当</h3><p>手作りのお弁当を夕食に。おかずのみ 600円／ご飯入り 700円。</p><p class="pr">600<small>円〜</small></p></div>
+    </div>
+    <ul class="notes reveal">
+      <li>ランチには、コーヒー・紅茶などの飲み物とデザートが付きます。</li>
+      <li>地元でとれた食材を、地元の食卓へ。地産地消にこだわっています。</li>
+      <li>コーヒーは豆から挽いて淹れたてを。</li>
+      <li>糖尿病や腎臓病の方、お粥・刻み食など、お体に合わせたお食事にも対応します。</li>
+    </ul>
+    <p class="fine reveal">黒船デイサービス4号・3号のお食事です（2026年6月1日改定）。白船デイサービス1号は「白船ランチ」600円（飲み物・ランチ・デザート付き）です。</p>
+  </div>
+</section>
+
+<section id="base" class="basesec">
+  <div class="inner">
+    <div class="head"><h2>KUROFUNE BASE</h2><p class="reveal">エレツが管理する賃貸の基地。屋上には、クロフネ砲と花を浮かべたジャグジーバス。</p></div>
+    <div class="stage reveal" id="stage" aria-roledescription="スライド" aria-label="KUROFUNE BASE の屋上">
+      <figure class="sl on" style="--kx:-2%;--ky:2%"><img src="/img/base_rose.jpg" alt="バラの花びらを一面に浮かべた屋上のジャグジーバス。奥にクロフネ砲と山" loading="lazy" style="object-position:50% 70%"></figure>
+      <figure class="sl" style="--kx:2%;--ky:-1%"><img src="/img/base_night_hero.jpg" alt="夜の屋上。花びらのジャグジーの縁に立つクロフネマンと、クロフネ砲" loading="lazy" style="object-position:50% 45%"></figure>
+      <figure class="sl" style="--kx:-1%;--ky:-2%"><img src="/img/base_cannon_night.jpg" alt="夜景を背に、クロフネ砲に手をかけるクロフネマン" loading="lazy" style="object-position:50% 40%"></figure>
+      <figure class="sl" style="--kx:1%;--ky:2%"><img src="/img/base_dusk.jpg" alt="夕暮れの KUROFUNE BASE。屋上にクロフネ砲" loading="lazy" style="object-position:50% 35%"></figure>
+      <i class="glint" aria-hidden="true"></i>
+      <canvas id="petals" aria-hidden="true"></canvas>
+      <div class="hud" aria-hidden="true"><i class="c c1"></i><i class="c c2"></i><i class="c c3"></i><i class="c c4"></i><span class="tl lat" id="camn">ROOFTOP CAM 01 / 04</span><span class="tr lat"><i></i><span id="camt">00:00:00:00</span></span></div>
+      <div class="cap" aria-live="polite"><small class="lat" id="capk">ROSE JACUZZI</small><b id="capb">花を浮かべた、<br class="m">屋上のジャグジー。</b></div>
+      <i class="prog" id="prog" aria-hidden="true"></i>
+    </div>
+    <div class="rail reveal" role="tablist" aria-label="屋上の写真を選ぶ">
+      <button role="tab" aria-selected="true" data-k="ROSE JACUZZI" data-c="花を浮かべた、|屋上のジャグジー。"><img src="/img/base_rose.jpg" alt="" loading="lazy" style="object-position:50% 70%"><span><em class="lat">01</em>花のジャグジー</span></button>
+      <button role="tab" aria-selected="false" data-k="NIGHT DECK" data-c="夜の屋上に、|ヒーローが降りる。"><img src="/img/base_night_hero.jpg" alt="" loading="lazy"><span><em class="lat">02</em>夜の屋上</span></button>
+      <button role="tab" aria-selected="false" data-k="KUROFUNE CANNON" data-c="名物、|クロフネ砲。"><img src="/img/base_cannon_night.jpg" alt="" loading="lazy"><span><em class="lat">03</em>クロフネ砲</span></button>
+      <button role="tab" aria-selected="false" data-k="THE BASE" data-c="砲を載せた、|夕暮れの基地。"><img src="/img/base_dusk.jpg" alt="" loading="lazy"><span><em class="lat">04</em>基地の外観</span></button>
+    </div>
+    <div class="basetext">
+      <p class="tagline reveal">そこは、住まいではなく「基地」。</p>
+      <div class="reveal">
+        <p>基地とは、あなたの活動の拠点となる場所。楽しい仲間と過ごす空間と、プライベートな空間をあわせ持つ、新しいリゾートの住まいです。</p>
+        <p>屋上には、黒船を象徴する名物「クロフネ砲」と、開放的なジャグジーバス。グラスを傾けながら、あなただけの星空を。ひとときの癒しが、明日の活動をさらに加速させます。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="voyager">
+  <svg class="route" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true"><path id="routep" d="M-20 820 C 180 760, 260 600, 420 620 S 640 760, 760 600 S 900 260, 1080 300 S 1320 420, 1460 120" fill="none" stroke="rgba(255,207,110,.55)" stroke-width="1.2" stroke-dasharray="6 8"/><path id="routeh" d="M-20 820 C 180 760, 260 600, 420 620 S 640 760, 760 600 S 900 260, 1080 300 S 1320 420, 1460 120" fill="none" stroke="#ffcf6e" stroke-width="2" style="filter:drop-shadow(0 0 6px #ffcf6e)"/><circle id="routeb" r="5" fill="#e1262d" style="filter:drop-shadow(0 0 8px #e1262d)"/></svg>
+  <div class="inner voyager">
+    <figure class="reveal"><span class="scan"></span><span class="tag lat">ANALYZING</span><img src="/img/adv_02.jpg" alt="古代の墓の壁画を灯りで照らして調べる黒船満"><figcaption class="lat">EXPEDITION</figcaption><div class="globe" aria-hidden="true"><span class="lat">ORIGIN 33.85N 130.90E</span><canvas id="globe"></canvas></div></figure>
+    <div class="reveal">
+      <div class="head" style="grid-template-columns:1fr;margin-bottom:30px"><h2>冒険家</h2></div>
+      <blockquote>初めまして、冒険家です。<br>現状に挑戦し、他者とは違う考え方をする。<br>それが私たちの信条です。</blockquote>
+      <p class="greet">『自分や愛する人が求めることは何か？』<br>それを追求することで、私たちは現状に挑戦しています。</p>
+      <p class="greet">“元気に日々を送ることができ、楽しみがそこにはある。やりたいことがやれるようになり、食事はおいしく健康に配慮され、安心して一日を過ごすことができる。”</p>
+      <p class="greet">追求した結果、黒船・白船デイサービスが誕生しました。<br>かけがえのないひとときを、ご一緒にいかがですか？</p>
+      <div class="who">代表取締役／冒険家　黒船満</div>
+      <a class="link" href="https://ameblo.jp/kurofunedayservice/" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a3 3 0 0 0-1 5.83V10H8v2h3v7.9A7 7 0 0 1 5.1 14H7l-3-4-3 4h2.06A9 9 0 0 0 12 22a9 9 0 0 0 8.94-8H23l-3-4-3 4h1.9A7 7 0 0 1 13 19.9V12h3v-2h-3V7.83A3 3 0 0 0 12 2Zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>航海日誌を読む（アメブロ）</a>
+    </div>
+  </div>
+</section>
+
+<section id="media">
+  <div class="inner">
+    <div class="head"><h2>取材</h2><p class="reveal">テレビ・新聞・ラジオ・ウェブで、数えきれないほど紹介していただきました。※ここに載せているのは一部です。</p></div>
+    <div class="clips reveal">
+      <a class="clip holo" href="https://www.youtube.com/watch?v=Vu8V-cBuaaQ" target="_blank" rel="noopener"><span class="frame"><img src="https://i.ytimg.com/vi/Vu8V-cBuaaQ/hqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span><b>TNC 報道ワイド 記者のチカラ</b><span>2025.04.15</span></a>
+      <a class="clip holo" href="https://www.youtube.com/watch?v=-TIWlTb-pVQ" target="_blank" rel="noopener"><span class="frame"><img src="https://i.ytimg.com/vi/-TIWlTb-pVQ/hqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span><b>KBC ぎゅっと</b><span>2025.03.18</span></a>
+      <a class="clip holo" href="https://www.youtube.com/watch?v=iBf5CY_1USc" target="_blank" rel="noopener"><span class="frame"><img src="https://i.ytimg.com/vi/iBf5CY_1USc/hqdefault.jpg" alt="" loading="lazy"><i class="play"></i></span><b>TNC ももち浜ストア</b><span>2021.09.29</span></a>
+    </div>
+    <ol class="medialog reveal">
+<li><span class="d lat">2025.12</span><span class="m lat">TNC</span><span class="n">じもチャンネル</span></li>
+<li><span class="d lat">2025.08.22</span><span class="m lat">RKB</span><span class="n">RKB毎日放送</span></li>
+<li><span class="d lat">2025.04.15</span><span class="m lat">TNC</span><span class="n"><a href="https://www.youtube.com/watch?v=Vu8V-cBuaaQ" target="_blank" rel="noopener">報道ワイド 記者のチカラ</a></span></li>
+<li><span class="d lat">2025.03.18</span><span class="m lat">KBC</span><span class="n"><a href="https://www.youtube.com/watch?v=-TIWlTb-pVQ" target="_blank" rel="noopener">ぎゅっと</a></span></li>
+<li><span class="d lat">2025.03.10</span><span class="m lat">WEB</span><span class="n"><a href="https://sasatto.jp/article/entry-7803.html" target="_blank" rel="noopener">福岡ふかぼりメディア ささっと</a></span></li>
+<li><span class="d lat">2024.07.14</span><span class="m lat">FBS</span><span class="n">地元検証バラエティ 福岡くん。（2回目）</span></li>
+<li><span class="d lat">2023.05.21</span><span class="m lat">FBS</span><span class="n">地元検証バラエティ 福岡くん。（1回目）</span></li>
+<li><span class="d lat">2022.11.29</span><span class="m lat">WEB</span><span class="n">号外NET</span></li>
+<li><span class="d lat">2021.09.29</span><span class="m lat">TNC</span><span class="n"><a href="https://www.youtube.com/watch?v=iBf5CY_1USc" target="_blank" rel="noopener">ももち浜ストア</a></span></li>
+<li><span class="d lat">2021.06.25</span><span class="m lat">KBC</span><span class="n">アサデス</span></li>
+<li><span class="d lat">2021.06.18</span><span class="m lat">誌面</span><span class="n">月刊日産 8・9月号 クロフネマン特集</span></li>
+<li><span class="d lat">2021.01.11</span><span class="m lat">新聞</span><span class="n"><a href="https://www.nishinippon.co.jp/item/680586/" target="_blank" rel="noopener">西日本新聞「『クロフネマン』躍進の年 北九州のご当地ヒーロー、虐待防止に奔走」</a></span></li>
+<li><span class="d lat">2020.12.28</span><span class="m lat">新聞</span><span class="n">毎日新聞・読売新聞</span></li>
+<li><span class="d lat">2020.12.27</span><span class="m lat">任命</span><span class="n"><a href="https://gourmetpress.net/486287/" target="_blank" rel="noopener">北九州市立総合農事センター（花農丘公園）観光PR大使に任命</a></span></li>
+<li><span class="d lat">2020.05</span><span class="m lat">誌面</span><span class="n">シニアビジネスマーケット 5月号</span></li>
+<li><span class="d lat">2019.12.08</span><span class="m lat">新聞</span><span class="n">読売新聞</span></li>
+<li><span class="d lat">2019.12.06</span><span class="m lat">新聞</span><span class="n">西日本新聞</span></li>
+<li><span class="d lat">2018.11</span><span class="m lat">誌面</span><span class="n">通所サービス&amp;マネジメント 11・12月号</span></li>
+<li><span class="d lat">2018.02.02 — 2026.05.15</span><span class="m lat">ラジオ</span><span class="n">FM KITAQ「FMクロフネマン〜Happy to the world〜」（約8年）</span></li>
+<li><span class="d lat">2017.09.02</span><span class="m lat">誌面</span><span class="n">ケアイノベーションアタック</span></li>
+<li><span class="d lat">2017.03</span><span class="m lat">誌面</span><span class="n">通所サービス&amp;マネジメント 3・4月号</span></li>
+<li><span class="d lat">—</span><span class="m lat">TVQ</span><span class="n">ふくサテ</span></li>
+<li><span class="d lat">—</span><span class="m lat">RKB</span><span class="n">今日感ニュース</span></li>
+<li><span class="d lat">—</span><span class="m lat">KBC</span><span class="n">ドゲンジャーズ</span></li>
+<li><span class="d lat">—</span><span class="m lat">ラジオ</span><span class="n">コミュニティFM 多数</span></li>
+    </ol>
+  </div>
+</section>
+
+<section id="signals">
+  <div class="inner">
+    <div class="kfm">
+      <figure aria-label="夜の屋上に立つクロフネマン"><img class="base" src="/img/kfm_night.jpg" alt="夜の屋上で、光る剣を構えるクロフネマン" loading="lazy"><img class="r" src="/img/kfm_night.jpg" alt="" loading="lazy" style="opacity:0"><img class="b" src="/img/kfm_night.jpg" alt="" loading="lazy" style="opacity:0"><i class="eye" aria-hidden="true"></i><i class="visor" aria-hidden="true"></i><span class="tagk lat" aria-hidden="true"><i></i>TARGET ACQUIRED</span><span class="id lat" id="kfmid" aria-hidden="true"></span></figure>
+      <div class="reveal">
+        <img class="logo" src="/img/kfm_logo_src.png" alt="クロフネマン BLACKSHIP-MAN（ERETZ.Co.,Ltd）" loading="lazy">
+        <h3>闇夜に立つ、<br>北九州のヒーロー。</h3>
+        <p>クロフネマンは、エレツ株式会社の KUROFUNEMAN PROJECT から生まれたヒーローです。イベント、キャラクター、制作。北九州の街を、今日も見張っています。</p>
+        <a class="link" href="https://kurofuneman.jp" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a3 3 0 0 0-1 5.83V10H8v2h3v7.9A7 7 0 0 1 5.1 14H7l-3-4-3 4h2.06A9 9 0 0 0 12 22a9 9 0 0 0 8.94-8H23l-3-4-3 4h1.9A7 7 0 0 1 13 19.9V12h3v-2h-3V7.83A3 3 0 0 0 12 2Zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>クロフネマン公式</a>
+        <div class="aff lat">AFFILIATION — ERETZ CO.,LTD. / KUROFUNEMAN PROJECT</div>
+      </div>
+    </div>
+    <div class="head"><h2>信号</h2><p class="reveal">日々の航海は、こちらで発信しています。</p></div>
+    <div class="signals reveal">
+      <a href="https://kurofuneman.jp" target="_blank" rel="noopener"><b>KUROFUNEMAN</b><span>クロフネマン公式</span></a>
+      <a href="https://ameblo.jp/kurofunedayservice/" target="_blank" rel="noopener"><b>BLOG</b><span>黒船航海日誌</span></a>
+      <a href="https://www.instagram.com/kurofuneman" target="_blank" rel="noopener"><b>INSTAGRAM</b><span>@kurofuneman</span></a>
+      <a href="https://www.youtube.com/channel/UCEuSLdPS-jB6coF2oyemSEA" target="_blank" rel="noopener"><b>YOUTUBE</b><span>クロフネマン チャンネル</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="access">
+  <div class="inner">
+    <div class="head"><h2>アクセス</h2><p class="reveal">場所を選ぶと、地図が切り替わります。Googleマップで開けば、そのまま道案内もできます。</p></div>
+    <div class="access reveal">
+      <div class="places" role="tablist"><button role="tab" aria-selected="true" data-q="%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82%E5%B0%8F%E5%80%89%E5%8D%97%E5%8C%BA%E6%A8%AA%E4%BB%A3%E6%9D%B1%E7%94%BA2%E4%B8%81%E7%9B%AE4-28"><b>本社・黒船デイサービス4号</b><span>北九州市小倉南区横代東町2丁目4-28</span><span class="lat tel">093-981-3772</span></button><button role="tab" aria-selected="false" data-q="%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82%E5%B0%8F%E5%80%89%E5%8D%97%E5%8C%BA%E6%A8%AA%E4%BB%A3%E6%9D%B1%E7%94%BA2%E4%B8%81%E7%9B%AE5-2"><b>黒船デイサービス3号</b><span>北九州市小倉南区横代東町2丁目5-2</span><span class="lat tel">093-967-9663</span></button><button role="tab" aria-selected="false" data-q="%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82%E5%B0%8F%E5%80%89%E5%8D%97%E5%8C%BA%E6%B2%BC%E6%9C%AC%E7%94%BA1%E4%B8%81%E7%9B%AE9-37"><b>白船デイサービス1号</b><span>北九州市小倉南区沼本町1丁目9-37</span><span class="lat tel">093-383-8879</span></button><button role="tab" aria-selected="false" data-q="%E7%A6%8F%E5%B2%A1%E7%9C%8C%E7%A6%8F%E6%B4%A5%E5%B8%82%E4%B8%AD%E5%A4%AE2%E4%B8%81%E7%9B%AE23-12"><b>HEADS株式会社（ハウスドゥ 福津）</b><span>福津市中央2丁目23-12</span><span class="lat tel">0940-62-6292</span></button></div>
+      <div class="map"><span class="corner"></span><iframe id="gmap" title="地図" loading="lazy" referrerpolicy="no-referrer-when-downgrade" src="https://www.google.com/maps?q=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82%E5%B0%8F%E5%80%89%E5%8D%97%E5%8C%BA%E6%A8%AA%E4%BB%A3%E6%9D%B1%E7%94%BA2%E4%B8%81%E7%9B%AE4-28&amp;output=embed"></iframe>
+        <a class="open lat" id="gopen" href="https://www.google.com/maps/search/?api=1&amp;query=%E7%A6%8F%E5%B2%A1%E7%9C%8C%E5%8C%97%E4%B9%9D%E5%B7%9E%E5%B8%82%E5%B0%8F%E5%80%89%E5%8D%97%E5%8C%BA%E6%A8%AA%E4%BB%A3%E6%9D%B1%E7%94%BA2%E4%B8%81%E7%9B%AE4-28" target="_blank" rel="noopener">OPEN IN GOOGLE MAPS</a></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="inner">
+    <div class="head"><h2>お問い合わせ</h2><p class="reveal">見学・体験のご予約、出演やスポンサーのご相談など、お気軽にどうぞ。お急ぎの方はお電話で。</p></div>
+    <form class="form reveal" name="contact" method="POST" action="https://formsubmit.co/yamaguchi@eretz.co.jp">
+      <input type="hidden" name="_subject" value="【エレツ】ホームページからのお問い合わせ"><input type="hidden" name="_next" value="https://eretz.co.jp/thanks.html"><input type="hidden" name="_captcha" value="false"><input type="hidden" name="_template" value="table">
+      <p class="hp"><label>入力しないでください <input name="_honey"></label></p>
+      <label class="f"><span>ご用件</span><select name="用件" required>
+        <option value="">選んでください</option><option>デイサービスの見学・体験</option><option>デイサービスのご利用について</option><option>KUROFUNE BASE について</option><option>クロフネマンの出演・スポンサー</option><option>デザイン／コンサル（ウェブ・ロゴ・経営・M&amp;A・AI・発信）</option><option>採用について</option><option>そのほか</option></select></label>
+      <label class="f"><span>お名前</span><input name="お名前" required autocomplete="name"></label>
+      <label class="f"><span>お電話番号</span><input name="電話" type="tel" autocomplete="tel"></label>
+      <label class="f"><span>メールアドレス</span><input name="メール" type="email" required autocomplete="email"></label>
+      <label class="f wide"><span>内容</span><textarea name="内容" rows="5" required></textarea></label>
+      <p class="wide note">いただいた内容は、お問い合わせへの返事にだけ使います。</p>
+      <button class="send lat wide" type="submit"><svg viewBox="0 0 24 24"><path fill="currentColor" d="M12 2a3 3 0 0 0-1 5.83V10H8v2h3v7.9A7 7 0 0 1 5.1 14H7l-3-4-3 4h2.06A9 9 0 0 0 12 22a9 9 0 0 0 8.94-8H23l-3-4-3 4h1.9A7 7 0 0 1 13 19.9V12h3v-2h-3V7.83A3 3 0 0 0 12 2Zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2Z"/></svg>送信する</button>
+    </form>
+  </div>
+</section>
+
+<section id="registry">
+  <div class="inner">
+    <div class="head"><h2>船籍</h2><p class="reveal">会社の概要です。</p></div>
+    <dl class="reg reveal">
+      <dt>会社名</dt><dd>エレツ株式会社</dd>
+      <dt>本社</dt><dd>〒802-0822　福岡県北九州市小倉南区横代東町二丁目4番28号</dd>
+      <dt>設立</dt><dd>2013年12月</dd>
+      <dt>資本金</dt><dd>5,500,000円</dd>
+      <dt>事業</dt><dd>福祉、KUROFUNEMAN PROJECT（企画）、デザイン／コンサル、衣食住 ほか</dd>
+      <dt>グループ</dt><dd>HEADS株式会社（ハウスドゥ 福津）　〒811-3217 福岡県福津市中央2丁目23番12号　<a class="go" href="https://fukutsu-housedo.com/" target="_blank" rel="noopener">fukutsu-housedo.com</a></dd>
+    </dl>
+    <div class="call reveal">
+      <a href="tel:0939813772"><small>お電話</small>093-981-3772</a>
+      <a href="#contact"><small>メール・ご相談</small>お問い合わせフォーム</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><span class="lat">ERETZ CO.,LTD.</span><span class="lat">33.85N 130.90E</span></footer>
+
+<script>
+(()=>{
+const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const AM='255,207,110',BR='212,171,82',RD='225,38,45',FM='232,237,241';
+
+/* 起動の文字 */
+const lines=['ERETZ NAV SYSTEM  v13.12','LINK  KOKURA-MINAMI  33.85N 130.90E','CALIBRATING COMPASS ........ OK','CONTACTS ON SCOPE ........... 38','ALL HANDS  —  READY'];
+const bootEl=document.getElementById('boot');
+if(still){bootEl.textContent=lines.join('\n');}else{let li=0,ci=0;(function type(){if(li>=lines.length)return;ci++;bootEl.textContent=lines.slice(0,li).join('\n')+(li?'\n':'')+lines[li].slice(0,ci);if(ci>=lines[li].length){li++;ci=0;setTimeout(type,90);}else setTimeout(type,14);})();}
+
+/* 時計（小倉の時刻） */
+const ck=document.getElementById('clock');
+setInterval(()=>{const d=new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Tokyo'}));ck.textContent='KOKURA '+[d.getHours(),d.getMinutes(),d.getSeconds()].map(n=>String(n).padStart(2,'0')).join(':');},1000);
+
+/* 計器 */
+const items=[
+ {b:45, r:.60,t:"福祉",d:"デイサービス・KUROFUNE BASE"},
+ {b:135,r:.66,t:"クロフネマン",d:"企画・イベント・キャラクター・制作"},
+ {b:225,r:.52,t:"デザイン／コンサル",d:"ウェブ・ロゴ・経営・M&A・AI・発信"},
+ {b:315,r:.70,t:"衣食住",d:"HEADS株式会社とともに"}
+];
+const minor=[];{let s=11;const rnd=()=>{s=(s*9301+49297)%233280;return s/233280};for(let k=0;k<34;k++)minor.push({b:rnd()*360,r:.2+rnd()*.72,h:-1e9});}
+const cv=document.getElementById('hud'),cx=cv.getContext('2d');
+let W,dpr=Math.min(2,devicePixelRatio||1);
+function size(){W=cv.getBoundingClientRect().width*dpr;cv.width=cv.height=W;}
+addEventListener('resize',size);size();
+const T0=performance.now();
+let sweep=-90,last=T0,focus=-1,pings=[],prev=-90;
+const hit=items.map(()=>-1e9),lock=items.map(()=>0);
+const rad=d=>(d-90)*Math.PI/180;
+function arcSeg(c,R,a0,a1,w,col){cx.beginPath();cx.arc(c,c,R,a0,a1);cx.lineWidth=w;cx.strokeStyle=col;cx.stroke();}
+function glow(on){cx.shadowBlur=on?14*dpr:0;cx.shadowColor=`rgba(${AM},.8)`;}
+function draw(t){
+  const dt=Math.min(64,t-last);last=t;
+  const boot=still?1:Math.min(1,(t-T0)/1500),e=1-Math.pow(1-boot,3);
+  const c=W/2,R=c*.86,L=dpr;
+  cx.clearRect(0,0,W,W);
+  cx.save();cx.globalCompositeOperation='lighter';
+  const sp=still?0:t/1000;
+
+  // いちばん外：区切りのある輪（ゆっくり右回り）
+  glow(true);
+  for(let k=0;k<12;k++){const a0=sp*.08+k*Math.PI/6+.04,a1=a0+Math.PI/6-.12;if(k/12<e)arcSeg(c,R*1.04,a0,a1,1.6*L,`rgba(${AM},${k%3==0?.85:.35})`);}
+  glow(false);
+  // 目盛りの輪
+  for(let d=0;d<360*e;d+=2){const a=rad(d),l=d%30==0?R*.06:d%10==0?R*.035:R*.018;cx.beginPath();cx.moveTo(c+Math.cos(a)*R,c+Math.sin(a)*R);cx.lineTo(c+Math.cos(a)*(R-l),c+Math.sin(a)*(R-l));cx.lineWidth=L;cx.strokeStyle=`rgba(${BR},${d%30==0?.75:.28})`;cx.stroke();}
+  arcSeg(c,R,-Math.PI/2,-Math.PI/2+e*Math.PI*2,L,`rgba(${BR},.6)`);
+  // 方位の数字（逆回りの輪に乗る）
+  if(boot>=1){cx.font=`${R*.032}px Michroma`;cx.textAlign='center';cx.textBaseline='middle';cx.fillStyle=`rgba(${BR},.55)`;
+    for(let d=0;d<360;d+=30){const a=rad(d)-sp*.05;cx.save();cx.translate(c+Math.cos(a)*R*.88,c+Math.sin(a)*R*.88);cx.rotate(a+Math.PI/2);cx.fillText(String(d).padStart(3,'0'),0,0);cx.restore();}}
+  // 方位（北東南西）
+  cx.font=`${R*.055}px "Shippori Mincho B1"`;cx.fillStyle=`rgba(${AM},${.9*e})`;
+  [['北',0],['東',90],['南',180],['西',270]].forEach(([s,d])=>{const a=rad(d);cx.fillText(s,c+Math.cos(a)*R*1.13,c+Math.sin(a)*R*1.13);});
+  // 中の輪（逆回りの破線）
+  cx.setLineDash([2*L,7*L]);cx.lineDashOffset=-sp*30;arcSeg(c,R*.75,0,7,L,`rgba(${BR},.35)`);cx.setLineDash([]);
+  arcSeg(c,R*.5,0,7,L,`rgba(${BR},.18)`);
+  for(let k=0;k<3;k++){const a0=-sp*.35+k*Math.PI*2/3;arcSeg(c,R*.62,a0,a0+Math.PI/3,1.4*L,`rgba(${AM},.45)`);}
+  // 十字
+  cx.beginPath();cx.moveTo(c-R,c);cx.lineTo(c+R,c);cx.moveTo(c,c-R);cx.lineTo(c,c+R);cx.lineWidth=L;cx.strokeStyle=`rgba(${BR},.1)`;cx.stroke();
+
+  if(boot>=1){
+    if(!still){sweep=(sweep+dt*.035)%360;if(prev>sweep)pings.push(t);prev=sweep;}
+    // 波紋
+    pings=pings.filter(p=>t-p<2800);pings.forEach(p=>{const k=(t-p)/2800;arcSeg(c,R*k,0,7,1.2*L,`rgba(${AM},${.4*(1-k)})`);});
+    // 掃引
+    const a=rad(sweep+90);
+    if(cx.createConicGradient){const g=cx.createConicGradient(a-1.1,c,c);g.addColorStop(0,`rgba(${AM},0)`);g.addColorStop(.175,`rgba(${AM},.30)`);g.addColorStop(.176,`rgba(${AM},0)`);cx.beginPath();cx.moveTo(c,c);cx.arc(c,c,R,a-1.1,a);cx.closePath();cx.fillStyle=g;cx.fill();}
+    glow(true);cx.beginPath();cx.moveTo(c,c);cx.lineTo(c+Math.cos(a)*R,c+Math.sin(a)*R);cx.lineWidth=1.5*L;cx.strokeStyle=`rgba(${AM},.95)`;cx.stroke();glow(false);
+    // 小さな点
+    minor.forEach(m=>{const df=((sweep+90-m.b)%360+360)%360;if(df<2.5&&t-m.h>2000)m.h=t;const al=still?.5:Math.max(0,1-(t-m.h)/4000);const ma=rad(m.b);
+      cx.beginPath();cx.arc(c+Math.cos(ma)*R*m.r,c+Math.sin(ma)*R*m.r,R*.007,0,7);cx.fillStyle=`rgba(${AM},${.1+al*.75})`;cx.fill();});
+    // 4つの海：照準が合う
+    items.forEach((it,i)=>{
+      const df=((sweep+90-it.b)%360+360)%360;
+      if(df<2.5&&t-hit[i]>2000){hit[i]=t;}
+      const al=i==focus||still?1:Math.max(0,1-(t-hit[i])/5000);
+      lock[i]+=((al>.05?1:0)-lock[i])*.12;
+      const ia=rad(it.b),x=c+Math.cos(ia)*R*it.r,y=c+Math.sin(ia)*R*it.r;
+      cx.shadowBlur=12*dpr;cx.shadowColor=`rgba(${RD},.9)`;
+      cx.beginPath();cx.arc(x,y,R*.016,0,7);cx.fillStyle=`rgba(${RD},${.35+al*.65})`;cx.fill();cx.shadowBlur=0;
+      // 照準の角括弧
+      const s=R*(.075-.035*lock[i]),k=s*.45;cx.strokeStyle=`rgba(${AM},${.15+.8*lock[i]})`;cx.lineWidth=1.2*L;cx.beginPath();
+      [[-1,-1],[1,-1],[-1,1],[1,1]].forEach(([sx,sy])=>{cx.moveTo(x+sx*s,y+sy*(s-k));cx.lineTo(x+sx*s,y+sy*s);cx.lineTo(x+sx*(s-k),y+sy*s);});cx.stroke();
+      // 引き出し線と名前
+      if(lock[i]>.15){const dir=Math.cos(ia)>=0?1:-1,ex=x+dir*R*.12,ey=y-R*.09,ex2=ex+dir*R*.06;
+        cx.globalAlpha=lock[i];cx.beginPath();cx.moveTo(x+dir*s,y-s);cx.lineTo(ex,ey);cx.lineTo(ex2,ey);cx.strokeStyle=`rgba(${AM},.8)`;cx.lineWidth=L;cx.stroke();
+        cx.textAlign=dir>0?'left':'right';cx.fillStyle=`rgba(${FM},.95)`;cx.font=`${R*.048}px "Shippori Mincho B1"`;cx.fillText(it.t,ex2+dir*R*.015,ey-R*.025);
+        
+        cx.globalAlpha=1;}
+    });
+  }
+  // 中心：錨の炉（脈打つ）
+  const pu=still?0:(Math.sin(t/420)+1)/2;
+  cx.shadowBlur=(18+pu*14)*dpr;cx.shadowColor=`rgba(${AM},.9)`;
+  arcSeg(c,R*.085,0,7*e,2*L,`rgba(${AM},${.6+pu*.4})`);
+  arcSeg(c,R*.05,0,7*e,L,`rgba(${AM},.7)`);cx.shadowBlur=0;
+  cx.fillStyle=`rgba(${AM},${.9*e})`;cx.font=`${R*.06}px serif`;cx.textAlign='center';cx.textBaseline='middle';cx.fillText('⚓',c,c+R*.004);
+  cx.restore();
+  // 外の読み取り（角）
+  cx.font=`${R*.026}px Michroma`;cx.fillStyle=`rgba(${BR},${.8*e})`;cx.textAlign='left';
+  cx.fillText('HDG '+String(Math.round((sweep+90+360)%360)).padStart(3,'0')+'°',W*.02,W*.04);
+  cx.fillText('CONTACTS 38',W*.02,W*.075);
+  cx.textAlign='right';cx.fillText('ERETZ / KUROFUNE',W*.98,W*.04);cx.fillText('ORBIT  EARTH',W*.98,W*.075);
+  requestAnimationFrame(draw);
+}
+requestAnimationFrame(draw);
+
+/* 一覧と計器を結ぶ */
+document.querySelectorAll('#list li').forEach(li=>{const i=+li.dataset.i;
+  li.addEventListener('mouseenter',()=>{focus=i;li.classList.add('on')});
+  li.addEventListener('mouseleave',()=>{focus=-1;li.classList.remove('on')});});
+
+/* 計器の傾き */
+const helm=document.querySelector('.helm'),scope=document.querySelector('.scope');
+if(!still&&matchMedia('(pointer:fine)').matches){helm.addEventListener('mousemove',e=>{const r=helm.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;scope.style.transform=`perspective(1400px) rotateY(${x*16}deg) rotateX(${-y*16}deg)`;});helm.addEventListener('mouseleave',()=>scope.style.transform='');}
+
+/* 照準のカーソル */
+const rt=document.getElementById('reticle');
+if(matchMedia('(pointer:fine)').matches){let mx=-99,my=-99,px=-99,py=-99;addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;rt.classList.toggle('lock',!!e.target.closest('a,li'));});
+  (function f(){px+=(mx-px)*.25;py+=(my-py)*.25;rt.style.transform=`translate(${px}px,${py}px)`;requestAnimationFrame(f);})();}
+
+
+/* 船団のタブ */
+const tabs=[...document.querySelectorAll('.tabs button')],dos=[...document.querySelectorAll('.dossier')];
+tabs.forEach(b=>b.addEventListener('click',()=>{const s=b.dataset.s;tabs.forEach(x=>x.setAttribute('aria-selected',x===b));dos.forEach(d=>d.classList.toggle('on',d.dataset.s===s));}));
+
+/* 地図の切り替え */
+const pls=[...document.querySelectorAll('.places button')],gm=document.getElementById('gmap'),go=document.getElementById('gopen');
+pls.forEach(b=>b.addEventListener('click',()=>{pls.forEach(x=>x.setAttribute('aria-selected',x===b));gm.src='https://www.google.com/maps?q='+b.dataset.q+'&output=embed';go.href='https://www.google.com/maps/search/?api=1&query='+b.dataset.q;}));
+
+/* 星の海：奥から迫る星。スクロールの速さでワープの線になる */
+(function(){
+  const c=document.getElementById('space'),x=c.getContext('2d');let w,h,d=Math.min(2,devicePixelRatio||1);
+  const N=matchMedia('(max-width:900px)').matches?420:950,st=[];
+  function rs(){w=c.width=innerWidth*d;h=c.height=innerHeight*d;}addEventListener('resize',rs);rs();
+  for(let i=0;i<N;i++)st.push({x:(Math.random()-.5)*2,y:(Math.random()-.5)*2,z:Math.random(),t:Math.random()});
+  let v=0,lastY=scrollY,mx=0,my=0,tmx=0,tmy=0;
+  addEventListener('mousemove',e=>{tmx=(e.clientX/innerWidth-.5);tmy=(e.clientY/innerHeight-.5);});
+  function f(){
+    const dy=scrollY-lastY;lastY=scrollY;v+= (Math.min(60,Math.abs(dy))*.0009-v)*.08;
+    mx+=(tmx-mx)*.05;my+=(tmy-my)*.05;
+    const sp=still?0:.0007+v;
+    x.clearRect(0,0,w,h);
+    for(const s of st){
+      const pz=s.z;s.z-=sp;if(s.z<=.02){s.z=1;s.x=(Math.random()-.5)*2;s.y=(Math.random()-.5)*2;}
+      const k=.5/s.z,X=w/2+(s.x-mx*.15)*w*k*.5,Y=h/2+(s.y-my*.15)*h*k*.5;
+      const k2=.5/pz,X2=w/2+(s.x-mx*.15)*w*k2*.5,Y2=h/2+(s.y-my*.15)*h*k2*.5;
+      if(X<0||X>w||Y<0||Y>h)continue;
+      const a=Math.min(1,(1-s.z)*1.3),r=(1-s.z)*1.6*d+.2;
+      const col=s.t<.12?`rgba(255,207,110,${a})`:s.t<.22?`rgba(150,185,255,${a})`:`rgba(235,240,250,${a})`;
+      if(v>.004){x.strokeStyle=col;x.lineWidth=r;x.beginPath();x.moveTo(X2,Y2);x.lineTo(X,Y);x.stroke();}
+      else{x.fillStyle=col;x.beginPath();x.arc(X,Y,r,0,7);x.fill();}
+    }
+    requestAnimationFrame(f);
+  }
+  f();
+})();
+/* 見出しを解読して出す */
+const GL='ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ01ΛΣΞΦΨΩ<>/#';
+function decode(el){if(still||el.dataset.done)return;el.dataset.done=1;const fin=el.textContent;let n=0;const iv=setInterval(()=>{n++;el.textContent=[...fin].map((ch,i)=>i<n/2?ch:(ch===' '?' ':GL[Math.random()*GL.length|0])).join('');if(n/2>=fin.length){clearInterval(iv);el.textContent=fin;}},38);}
+
+/* クリックした所からソナーの波紋 */
+(function(){const c=document.getElementById('ping'),x=c.getContext('2d');const d=Math.min(2,devicePixelRatio||1);let w,h,P=[];
+  function rs(){w=c.width=innerWidth*d;h=c.height=innerHeight*d;}addEventListener('resize',rs);rs();
+  addEventListener('pointerdown',e=>{if(!still)P.push({x:e.clientX*d,y:e.clientY*d,t:performance.now()});});
+  (function f(n){x.clearRect(0,0,w,h);P=P.filter(p=>n-p.t<1100);P.forEach(p=>{const k=(n-p.t)/1100;for(let j=0;j<3;j++){const kk=Math.max(0,k-j*.12);x.beginPath();x.arc(p.x,p.y,kk*160*d,0,7);x.strokeStyle=`rgba(255,207,110,${(1-kk)*.6})`;x.lineWidth=d;x.stroke();}});requestAnimationFrame(f);})(performance.now());})();
+/* ホログラムの光と傾き */
+if(!still&&matchMedia('(pointer:fine)').matches){document.querySelectorAll('.holo').forEach(el=>{
+  el.addEventListener('mousemove',e=>{const r=el.getBoundingClientRect(),px=(e.clientX-r.left)/r.width,py=(e.clientY-r.top)/r.height;el.style.setProperty('--hx',px*100+'%');el.style.setProperty('--hy',py*100+'%');el.style.transform=`perspective(900px) rotateX(${(.5-py)*7}deg) rotateY(${(px-.5)*7}deg)`;});
+  el.addEventListener('mouseleave',()=>{el.style.transform='';});});}
+/* 航程計 */
+(function(){const bar=document.getElementById('dbar'),dv=document.getElementById('dv'),dn=document.getElementById('dn');
+  const secs=[['top','HELM'],['course','COURSE'],['fleet','FLEET'],['table','TABLE'],['base','BASE'],['voyager','VOYAGER'],['media','MEDIA'],['signals','SIGNAL'],['access','ACCESS'],['contact','CONTACT'],['registry','REGISTRY']].map(([i,n])=>[document.getElementById(i),n]).filter(a=>a[0]);
+  function u(){const m=document.documentElement.scrollHeight-innerHeight,k=m>0?scrollY/m:0;bar.style.height=(k*100)+'%';dv.textContent=String(Math.round(k*1000)).padStart(3,'0')+' NM';let cur='HELM';secs.forEach(([el,n])=>{if(el.getBoundingClientRect().top<innerHeight*.45)cur=n;});dn.textContent=cur;}
+  addEventListener('scroll',u,{passive:true});u();})();
+/* 小見出しと同じ名前のアドレス（#なし）：eretz.co.jp/dayservice など。見ている所のアドレスをそのまま送れる */
+(function(){
+  const SLUG={top:'',course:'business',fleet:'dayservice',table:'food',base:'base',voyager:'adventure',media:'media',signals:'kurofuneman',access:'access',contact:'contact',registry:'company'};
+  const ID={};Object.keys(SLUG).forEach(k=>{if(SLUG[k])ID[SLUG[k]]=k;});
+  const secs=Object.keys(SLUG).map(k=>document.getElementById(k)).filter(Boolean);
+  let cur=null,lock=0;
+  function go(id,smooth){const b=smooth?'smooth':'auto';if(id==='top')scrollTo({top:0,behavior:b});else{const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:b});}}
+  function put(id,push){cur=id;const p='/'+SLUG[id];if(p===location.pathname&&!location.hash)return;try{history[push?'pushState':'replaceState'](null,'',p);}catch(e){}}
+  // 入口：/dayservice でも、前の #fleet でも、その小見出しへ
+  const h=location.hash.slice(1),want=ID[location.pathname.replace(/^\/|\/$/g,'')]||(SLUG[h]!==undefined?h:null);
+  if(want){put(want,false);lock=Date.now()+2500;requestAnimationFrame(()=>go(want,false));addEventListener('load',()=>go(want,false));}
+  document.addEventListener('click',e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const id=a.getAttribute('href').slice(1);if(SLUG[id]===undefined)return;e.preventDefault();lock=Date.now()+1200;put(id,true);go(id,true);});
+  addEventListener('popstate',()=>{const id=ID[location.pathname.replace(/^\/|\/$/g,'')]||'top';cur=id;lock=Date.now()+1200;go(id,true);});
+  addEventListener('scroll',()=>{if(Date.now()<lock)return;let id='top';secs.forEach(el=>{if(el.getBoundingClientRect().top<innerHeight*.45)id=el.id;});if(id!==cur)put(id,false);},{passive:true});
+})();
+/* 値段を数え上げる */
+function countUp(sec){if(still)return;sec.querySelectorAll('.pr').forEach(el=>{const to=+el.firstChild.textContent.replace(/,/g,'');if(!to)return;const s0=performance.now();(function f(n){const k=Math.min(1,(n-s0)/1300),v=Math.round(to*(1-Math.pow(1-k,4)));el.firstChild.textContent=v.toLocaleString('ja-JP');if(k<1)requestAnimationFrame(f);})(s0);});}
+
+/* 黒船：カメラの手前から現れ、噴射の光を吐きながら遠ざかり、溜めて一瞬で跳び、船のいた所で閃光 */
+(function(){
+  if(still)return;
+  const sh=document.getElementById('ship'),wp=document.getElementById('warp'),helm=document.querySelector('.helm'),im=sh.querySelector('img');
+  let ph='wait',t0=performance.now()+1800;
+  function flash(x,y,sz){wp.style.width=wp.style.height=sz+'px';wp.style.margin=(-sz/2)+'px 0 0 '+(-sz/2)+'px';wp.style.left=x+'px';wp.style.top=y+'px';wp.classList.remove('go');void wp.offsetWidth;wp.classList.add('go');}
+  // 閃光は計算上の点でなく、いま船が見えている所に出す
+  function flashOnShip(sz){const r=im.getBoundingClientRect(),o=wp.offsetParent.getBoundingClientRect();flash(r.left-o.left+r.width*.5,r.top-o.top+r.height*.5,sz);}
+  (function f(n){
+    const W=helm.clientWidth,H=helm.clientHeight,sw=sh.offsetWidth,top=scrollY<H*.4;
+    // 出発（手前・左下）と消える点（地平の上の暗い宇宙）
+    const ax=W*.12,ay=H*.90,vx=W*.58,vy=H*.56,CRU=5200,CHG=550,JMP=190,ZC=8;
+    let el=n-t0,op=0,x=ax,y=ay,s=1.25,bl=0,rot=-4,sx=1,pw=1,br=1,z=1,done=false;
+    if(ph==='wait'){if(el>0&&top){ph='go';t0=n;el=0;flash(ax+sw*.2,ay,320);}}
+    if(ph==='go'){
+      // 巡航：一定の推力で遠ざかる（遠近で見かけは小さくゆっくり）
+      const k=Math.min(1,el/CRU);
+      z=1+(ZC-1)*Math.pow(k,1.5);
+      op=Math.min(1,el/180); pw=1+.15*Math.sin(n/90);
+      if(k>=1){ph='chg';t0=n;}
+    }else if(ph==='chg'){
+      // 溜め：ほぼ止まって噴射が膨らむ
+      const k=Math.min(1,el/CHG);
+      z=ZC+.5*k; op=1; pw=1+1.4*k*k; br=1+.35*k;
+      if(k>=1){ph='jmp';t0=n;}
+    }else if(ph==='jmp'){
+      // 跳躍：一瞬で奥へ。進む向きに伸びて細くなる
+      const k=Math.min(1,el/JMP);
+      z=ZC+.5+160*Math.pow(k,3); op=1; pw=2.4+2*k; sx=1+5*k*k; br=1.35+1.2*k;
+      if(k>=1)done=true;
+    }
+    if(ph!=='wait'){
+      s=1.25/z; x=vx+(ax-vx)/z; y=vy+(ay-vy)/z; rot=-4/z-1;
+      bl=Math.max(0,(1-Math.min(1,z/ZC))*.6)+(ph==='jmp'?(sx-1)*.25:0);
+    }
+    if(!top&&ph!=='wait'){ph='wait';t0=n+1e9;op=0;}
+    if(top&&ph==='wait'&&t0>n+5e8)t0=n+1200;
+    sh.style.setProperty('--pw',pw.toFixed(3));
+    sh.style.opacity=op;
+    sh.style.filter=`blur(${bl.toFixed(2)}px) brightness(${(br*(1-Math.min(.3,(1-s)*.25))).toFixed(2)})`;
+    sh.style.transform=`translate(${x-sw/2}px,${y-sw*.2}px) rotate(${rot}deg) scale(${(s*sx).toFixed(4)},${(s/Math.sqrt(sx)).toFixed(4)})`;
+    if(done){flashOnShip(150);ph='wait';t0=n+7000;sh.style.opacity=0;}
+    requestAnimationFrame(f);
+  })(performance.now());
+})();
+/* ===== ギミック頂点 ===== */
+const fine=matchMedia('(pointer:fine)').matches;
+const pw=document.getElementById('power');
+if(still)pw.remove();else setTimeout(()=>pw.remove(),1500);
+
+/* 節ごとの走査線と「読み込み」表示 */
+const SEC={course:'COURSE',fleet:'FLEET',table:'GALLEY',base:'BASE',voyager:'VOYAGER',media:'ARCHIVE',signals:'KUROFUNEMAN',access:'NAVIGATION',contact:'COMMS',registry:'REGISTRY'};
+Object.keys(SEC).forEach((id,i)=>{const s=document.getElementById(id);if(!s)return;const d=document.createElement('div');d.className='sector';d.setAttribute('aria-hidden','true');d.innerHTML=`<i class="sl"></i><span class="lb lat">SECTOR ${String(i+1).padStart(2,'0')} · ${SEC[id]} — <b>STANDBY</b></span>`;s.prepend(d);});
+function scanSec(s){const b=s.querySelector('.sector .lb b');if(!b)return;if(still){b.textContent='LOCKED';return;}const st=['SCANNING','SCANNING .','SCANNING ..','SCANNING ...','LOCKED'];st.forEach((t,k)=>setTimeout(()=>{b.textContent=t;},k*300));}
+
+/* 数字が計器のように回って止まる */
+function roll(el,fin){if(still)return;const t0=performance.now(),D=900;(function f(n){const k=(n-t0)/D;if(k>=1){el.textContent=fin;return;}el.textContent=[...fin].map(ch=>/\d/.test(ch)?(Math.random()*10|0):ch).join('');requestAnimationFrame(f);})(t0);}
+
+/* 遠隔計測（画面の左下）とカーソルの光・座標 */
+(function(){const te=document.getElementById('tele'),rc=document.getElementById('rc'),gc=document.getElementById('glowc');
+  let mx=0,my=0,gx=0,gy=0,ly=scrollY,v=0,frames=0,fps=60,t1=performance.now();
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;});
+  (function f(n){const dy=scrollY-ly;ly=scrollY;v+=(Math.abs(dy)-v)*.1;frames++;if(n-t1>1000){fps=frames;frames=0;t1=n;}
+    if(fine&&!still){gx+=(mx-gx)*.08;gy+=(my-gy)*.08;gc.style.transform=`translate(${gx}px,${gy}px)`;}
+    if(fine)rc.textContent=`X${String(Math.round(mx)).padStart(4,'0')} Y${String(Math.round(my+scrollY)).padStart(5,'0')}`;
+    if(innerWidth>=1300)te.textContent=`HDG  ${String(Math.round((n/40)%360)).padStart(3,'0')}°\nVEL  ${(v*.6).toFixed(1).padStart(5,'0')} KN\nDEPTH ${String(Math.round(scrollY)).padStart(5,'0')}\nSYS  ONLINE`;te.style.opacity=(document.documentElement.scrollHeight-innerHeight-scrollY)<160?0:'';
+    requestAnimationFrame(f);})(performance.now());})();
+
+/* キーを押すと、計器が反応して画面の縁が一瞬光る */
+(function(){if(still)return;const fr=document.querySelector('.hudf');addEventListener('keydown',()=>{fr.animate([{filter:'drop-shadow(0 0 10px rgba(255,207,110,1)) brightness(2)'},{filter:'none'}],{duration:500,easing:'ease-out'});});})();
+
+/* BASE：屋上の映写と、きらめく花びら */
+(function(){
+  const st=document.getElementById('stage');if(!st)return;
+  const sl=[...st.querySelectorAll('.sl')],bt=[...document.querySelectorAll('.rail button')],capk=document.getElementById('capk'),capb=document.getElementById('capb'),camn=document.getElementById('camn'),camt=document.getElementById('camt'),prog=document.getElementById('prog');
+  let cur=0,tm=null,hover=false,vis=false;
+  function show(i,user){cur=i;sl.forEach((s,k)=>s.classList.toggle('on',k===i));bt.forEach((b,k)=>b.setAttribute('aria-selected',k===i));
+    capk.textContent=bt[i].dataset.k;capb.innerHTML=bt[i].dataset.c.split('|').join('<br class="m">');capb.classList.remove('in');void capb.offsetWidth;capb.classList.add('in');
+    camn.textContent=`ROOFTOP CAM ${String(i+1).padStart(2,'0')} / 04`;
+    prog.classList.remove('run');void prog.offsetWidth;if(!still&&!hover)prog.classList.add('run');plan();}
+  function plan(){clearTimeout(tm);if(still||hover||!vis)return;tm=setTimeout(()=>show((cur+1)%sl.length),6500);}
+  bt.forEach((b,k)=>b.addEventListener('click',()=>show(k,true)));
+  st.addEventListener('mouseenter',()=>{hover=true;clearTimeout(tm);prog.classList.remove('run');});
+  st.addEventListener('mouseleave',()=>{hover=false;show(cur);});
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;if(vis)show(cur);else clearTimeout(tm);},{threshold:.25}).observe(st);
+  const T=performance.now();if(!still)setInterval(()=>{if(!vis)return;const s=(performance.now()-T)/1000;camt.textContent=[s/3600,s/60%60,s%60,s*24%24].map(n=>String(Math.floor(n)).padStart(2,'0')).join(':');},100);
+  // 花びらときらめき：ジャグジーから立ちのぼる
+  const c=document.getElementById('petals'),x=c.getContext('2d'),d=Math.min(2,devicePixelRatio||1);let w,h;
+  function rs(){const r=st.getBoundingClientRect();w=c.width=r.width*d;h=c.height=r.height*d;}addEventListener('resize',rs);rs();
+  const N=matchMedia('(max-width:900px)').matches?22:46,P=[];
+  const COL=['225,30,50','255,70,90','200,20,40','255,200,80','255,150,170'];
+  function seed(p,first){p.x=Math.random();p.y=first?Math.random():1.05+Math.random()*.1;p.s=.5+Math.random();p.vy=.00025+Math.random()*.0004;p.ph=Math.random()*6.28;p.r=Math.random()*6.28;p.vr=(Math.random()-.5)*.02;p.c=COL[Math.random()*COL.length|0];p.g=Math.random()<.35;return p;}
+  for(let i=0;i<N;i++)P.push(seed({},true));
+  (function f(n){requestAnimationFrame(f);if(!vis)return;x.clearRect(0,0,w,h);if(still)return;
+    for(const p of P){p.y-=p.vy;p.r+=p.vr;const sx=(p.x+Math.sin(n/2200+p.ph)*.025)*w,sy=p.y*h;if(p.y<-.05)seed(p,false);
+      const fade=Math.min(1,(1.05-p.y)*3)*Math.min(1,p.y*4+.2);
+      if(p.g){const tw=(Math.sin(n/260+p.ph*3)+1)/2,R=(1.2+tw*2.4)*d*p.s;x.globalCompositeOperation='lighter';x.fillStyle=`rgba(255,236,190,${.85*tw*fade})`;x.beginPath();x.arc(sx,sy,R*.5,0,7);x.fill();x.fillRect(sx-R*2.6,sy-.4*d,R*5.2,.8*d);x.fillRect(sx-.4*d,sy-R*2.6,.8*d,R*5.2);x.globalCompositeOperation='source-over';}
+      else{x.save();x.translate(sx,sy);x.rotate(p.r);x.scale(1,.55+.45*Math.sin(n/500+p.ph));x.fillStyle=`rgba(${p.c},${.75*fade})`;x.shadowColor=`rgba(${p.c},.8)`;x.shadowBlur=6*d;x.beginPath();x.ellipse(0,0,5*d*p.s,3.2*d*p.s,0,0,7);x.fill();x.restore();}}
+  })(performance.now());
+})();
+
+/* クロフネマン：識別の文字 */
+function kfmId(){const el=document.getElementById('kfmid');if(!el||el.dataset.done)return;el.dataset.done=1;const L=['IDENT ...... KUROFUNEMAN','CLASS ...... DARK HERO','BASE ....... KITAKYUSHU','AFFIL ...... ERETZ CO.,LTD.'];if(still){el.textContent=L.join('\n');return;}let li=0,ci=0;setTimeout(function ty(){if(li>=L.length)return;ci++;el.textContent=L.slice(0,li).join('\n')+(li?'\n':'')+L[li].slice(0,ci);if(ci>=L[li].length){li++;ci=0;setTimeout(ty,120);}else setTimeout(ty,18);},1600);}
+
+/* 冒険家：回る地球儀と、小倉から伸びる航路 */
+(function(){
+  const c=document.getElementById('globe');if(!c)return;const x=c.getContext('2d'),d=Math.min(2,devicePixelRatio||1);let S,vis=false;
+  function rs(){S=c.width=c.height=c.getBoundingClientRect().width*d;}addEventListener('resize',rs);rs();
+  new IntersectionObserver(es=>{vis=es[0].isIntersecting;},{threshold:.1}).observe(c);
+  const home=[33.85,130.9],dest=[[27.2,78],[30,31],[48.8,2.3],[-25,131],[64,-20],[-13.2,-72.5],[21,-87]];
+  const rad=a=>a*Math.PI/180;
+  function slerp(a,b,t){const A=[Math.cos(rad(a[0]))*Math.cos(rad(a[1])),Math.cos(rad(a[0]))*Math.sin(rad(a[1])),Math.sin(rad(a[0]))],B=[Math.cos(rad(b[0]))*Math.cos(rad(b[1])),Math.cos(rad(b[0]))*Math.sin(rad(b[1])),Math.sin(rad(b[0]))];const om=Math.acos(Math.min(1,A[0]*B[0]+A[1]*B[1]+A[2]*B[2]))||1e-6,s=Math.sin(om);const k1=Math.sin((1-t)*om)/s,k2=Math.sin(t*om)/s;return[A[0]*k1+B[0]*k2,A[1]*k1+B[1]*k2,A[2]*k1+B[2]*k2].map(v=>v*(1+.12*Math.sin(Math.PI*t)));}
+  function v3(lat,lon){return[Math.cos(rad(lat))*Math.cos(rad(lon)),Math.cos(rad(lat))*Math.sin(rad(lon)),Math.sin(rad(lat))];}
+  let rot=rad(-120);const tilt=rad(-22);
+  function pj(p){const cr=Math.cos(rot),sr=Math.sin(rot);let X=p[0]*cr-p[1]*sr,Y=p[0]*sr+p[1]*cr,Z=p[2];const ct=Math.cos(tilt),stt=Math.sin(tilt);const Y2=Y,Z2=Z*ct-X*stt,X2=Z*stt+X*ct;return{x:S/2+Y2*S*.4,y:S/2-Z2*S*.4,z:X2};}
+  (function f(n){requestAnimationFrame(f);if(!vis&&!still)return;rot=still?rad(-125):rad(-125)+Math.sin(n/9000)*.9;
+    x.clearRect(0,0,S,S);const R=S*.4,C=S/2;
+    x.fillStyle='rgba(3,7,15,.55)';x.beginPath();x.arc(C,C,R,0,7);x.fill();
+    x.strokeStyle='rgba(255,207,110,.75)';x.lineWidth=d;x.beginPath();x.arc(C,C,R,0,7);x.stroke();
+    x.lineWidth=.6*d;
+    for(let la=-60;la<=60;la+=30){x.beginPath();let pen=false;for(let lo=0;lo<=360;lo+=6){const q=pj(v3(la,lo));if(q.z<0){pen=false;continue;}pen?x.lineTo(q.x,q.y):x.moveTo(q.x,q.y);pen=true;}x.strokeStyle='rgba(212,171,82,.35)';x.stroke();}
+    for(let lo=0;lo<360;lo+=30){x.beginPath();let pen=false;for(let la=-90;la<=90;la+=6){const q=pj(v3(la,lo));if(q.z<0){pen=false;continue;}pen?x.lineTo(q.x,q.y):x.moveTo(q.x,q.y);pen=true;}x.strokeStyle='rgba(212,171,82,.3)';x.stroke();}
+    const T=still?1:((n/4200)%1);
+    dest.forEach((b,i)=>{const prog=still?1:Math.min(1,Math.max(0,(T*dest.length*1.4-i*.9)));x.beginPath();let pen=false;for(let k=0;k<=40*prog;k++){const q=pj(slerp(home,b,k/40));if(q.z<-.05){pen=false;continue;}pen?x.lineTo(q.x,q.y):x.moveTo(q.x,q.y);pen=true;}x.strokeStyle='rgba(255,207,110,.9)';x.lineWidth=1.1*d;x.shadowBlur=6*d;x.shadowColor='#ffcf6e';x.stroke();x.shadowBlur=0;
+      if(prog>=1){const q=pj(v3(b[0],b[1]));if(q.z>0){x.fillStyle='rgba(255,207,110,.9)';x.beginPath();x.arc(q.x,q.y,1.6*d,0,7);x.fill();}}});
+    const h=pj(v3(home[0],home[1]));if(h.z>0){const pu=(Math.sin(n/300)+1)/2;x.fillStyle='#e1262d';x.shadowBlur=10*d;x.shadowColor='#e1262d';x.beginPath();x.arc(h.x,h.y,2.6*d,0,7);x.fill();x.shadowBlur=0;x.strokeStyle=`rgba(225,38,45,${1-pu})`;x.beginPath();x.arc(h.x,h.y,(3+pu*9)*d,0,7);x.stroke();}
+  })(performance.now());
+})();
+
+/* 冒険家の背景の航路：スクロールに合わせて線が伸び、赤い船が進む */
+(function(){const sec=document.getElementById('voyager'),p=document.getElementById('routeh'),b=document.getElementById('routeb');if(!p)return;const L=p.getTotalLength();p.style.strokeDasharray=L;
+  function u(){const r=sec.getBoundingClientRect();let k=(innerHeight-r.top)/(innerHeight+r.height);k=Math.max(0,Math.min(1,still?1:k*1.25));p.style.strokeDashoffset=L*(1-k);const q=p.getPointAtLength(L*k);b.setAttribute('cx',q.x);b.setAttribute('cy',q.y);}
+  addEventListener('scroll',u,{passive:true});addEventListener('resize',u);u();})();
+
+/* 見出しの角括弧と出現 */
+const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const s=en.target;s.classList.add('seen');s.querySelectorAll('.head h2').forEach(decode);scanSec(s);
+  if(s.id==='table')countUp(s);
+  if(s.id==='fleet')s.querySelectorAll('.tabs .num').forEach(el=>roll(el,el.textContent));
+  if(s.id==='registry')s.querySelectorAll('.call a').forEach(a=>{const t=a.lastChild;if(t&&/\d/.test(t.textContent)){const sp=document.createElement('span');sp.textContent=t.textContent;a.replaceChild(sp,t);roll(sp,sp.textContent);}});
+  if(s.id==='signals')kfmId();
+  io.unobserve(s);}}),{threshold:.18});
+document.querySelectorAll('section').forEach(s=>io.observe(s));
+})();
+</script>
+</body>
+</html>
