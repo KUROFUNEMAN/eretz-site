@@ -461,6 +461,46 @@ section > .inner{position:relative;z-index:1}
   *,*::before,*::after{animation:none!important;transition:none!important}
   .say h1 .ln span{transform:none}.say p{opacity:1}.reveal{opacity:1;transform:none}
 }
+/* ちびの案内役：既存の画面から独立した、小さな漫画の窓 */
+#ship.guide-flyby{position:fixed;width:min(400px,70vw);z-index:71}
+#guide-flight-stage{position:fixed;inset:0;z-index:71;overflow:hidden;contain:layout paint;pointer-events:none}
+#guide-hero{position:fixed;left:0;top:0;width:88px;height:104px;z-index:72;isolation:isolate}
+#guide-hero[hidden],#guide-bubble[hidden]{display:none}
+#guide-launch{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;width:88px;height:104px;padding:0;border:0;background:none;color:var(--amber);cursor:pointer;touch-action:manipulation;transform-origin:50% 90%}
+#guide-sprite{display:block;width:88px;height:86px;object-fit:contain;filter:drop-shadow(0 3px 5px #03070f)}
+#guide-hero[data-pose="3"] #guide-sprite{height:70px}
+#guide-launch .guide-label{padding:2px 9px;border:1px solid var(--brass);border-radius:12px;background:#0b1830;font-size:11px;line-height:1.4;white-space:nowrap}
+#guide-hero:not(.docked) .guide-label{visibility:hidden}
+#guide-hero.docked #guide-sprite{animation:guide-breathe 3.4s ease-in-out infinite}
+@keyframes guide-breathe{50%{transform:translateY(-1.5px) scale(1.015)}}
+#guide-launch:focus-visible,#guide-bubble button:focus-visible,#guide-panel :focus-visible{outline:2px solid #8feaff;outline-offset:4px}
+#guide-bubble{position:absolute;bottom:116px;left:50%;width:248px;max-width:calc(100vw - 32px);transform:translateX(-50%) rotate(-2deg);padding:19px 30px 19px 18px;border:2px solid #ffcf6e;border-radius:48% 44% 42% 38% / 28% 34% 32% 36%;background:#fff5dc;color:#11223a;box-shadow:4px 5px 0 #03070f,0 0 22px #ffcf6e33;font-weight:800;line-height:1.6;text-align:center;font-size:17px}
+#guide-bubble::after{content:"";position:absolute;bottom:-13px;left:46%;width:18px;height:22px;background:#fff5dc;border-right:2px solid #ffcf6e;border-bottom:2px solid #ffcf6e;transform:skewY(-30deg) rotate(30deg)}
+#guide-bubble button{position:absolute;right:9px;top:8px;border:0;background:none;color:#11223a;width:28px;height:28px;font-size:23px;line-height:1;cursor:pointer}
+#guide-rays{position:absolute;inset:-32px 0 12px;z-index:-1;opacity:0;pointer-events:none;background:repeating-conic-gradient(from 15deg,transparent 0deg 24deg,#ffe5a84d 25deg 28deg,transparent 29deg 45deg);mask-image:radial-gradient(ellipse,#000 0,transparent 68%);-webkit-mask-image:radial-gradient(ellipse,#000 0,transparent 68%)}
+#guide-hero[data-pose="7"] #guide-rays{opacity:.8}
+#guide-impact{position:absolute;left:10px;right:10px;bottom:14px;height:12px;border-radius:50%;background:#94e9ff;box-shadow:0 0 16px #81e5ff;opacity:0;pointer-events:none}
+#guide-panel{position:fixed;inset:auto 18px max(140px,env(safe-area-inset-bottom)) auto;margin:0;width:420px;max-width:calc(100vw - 32px);max-height:calc(100dvh - 164px);padding:0;border:1px solid var(--brass);border-radius:15px 15px 4px 15px;background:#0b1830;color:#e8edf1;box-shadow:0 14px 60px #000b;overflow:auto;overscroll-behavior:contain;font-size:14px;line-height:1.7}
+#guide-panel::backdrop{background:#03070f26}
+#guide-panel .guide-heading{display:flex;gap:14px;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--brass-dim)}
+#guide-panel h2{margin:0;color:var(--amber);font-size:17px;font-weight:500}
+#guide-close{flex:none;width:36px;height:36px;border:1px solid var(--brass-dim);background:#03070f;color:var(--foam);border-radius:50%;font-size:24px;cursor:pointer}
+#guide-panel .guide-body{padding:16px 18px 20px}
+#guide-form label{display:block;margin-bottom:8px;color:var(--foam)}
+#guide-form .guide-entry{display:flex;gap:8px}
+#guide-query{min-width:0;flex:1;width:100%;padding:10px;border:1px solid #71819a;border-radius:4px;background:#03070f;color:#fff;font:inherit}
+#guide-panel button,#guide-panel a{font-family:inherit}
+#guide-submit,#guide-panel .guide-jump{padding:9px 13px;border:1px solid var(--brass);border-radius:4px;background:#ffcf6e;color:#11223a;font-size:13px;text-decoration:none;cursor:pointer;white-space:nowrap}
+#guide-panel .guide-note{font-size:11px;color:#b4c1d4;margin:9px 0 14px}
+#guide-faq{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+#guide-faq button{border:1px solid #71819a;border-radius:16px;padding:5px 11px;background:#10213b;color:#e8edf1;font-size:12px;cursor:pointer}
+#guide-results article{border-top:1px solid var(--brass-dim);padding:13px 0 4px}
+#guide-results h3{font-size:14px;font-weight:500;color:var(--amber);margin:0 0 7px}
+#guide-results p{font-size:13px;margin:0 0 13px;overflow-wrap:anywhere}
+#guide-results .guide-jump{display:inline-block}
+@media(max-width:600px){#guide-panel{right:16px;max-height:calc(100dvh - 150px);bottom:128px}#guide-sprite{height:80px}#guide-bubble{width:234px;font-size:16px}}
+@media(max-height:520px){#guide-panel{bottom:12px;max-height:calc(100dvh - 24px)}}
+@media(prefers-reduced-motion:reduce){#guide-hero #guide-sprite{animation:none}#guide-rays{display:none}}
 </style>
 </head>
 <body>
@@ -716,6 +756,22 @@ section > .inner{position:relative;z-index:1}
 
 <footer><span class="lat">ERETZ CO.,LTD.</span><span class="lat">33.85N 130.90E</span></footer>
 
+<!-- ちびの案内役。入力内容はこのページ内だけで照合する。 -->
+<div id="guide-hero" hidden data-pose="0">
+  <i id="guide-rays" aria-hidden="true"></i><i id="guide-impact" aria-hidden="true"></i>
+  <div id="guide-bubble" role="status" aria-live="polite" hidden><span></span><button type="button" aria-label="登場の吹き出しを閉じて右端へ">×</button></div>
+  <button id="guide-launch" type="button" aria-label="クロフネマンの案内を開く" aria-haspopup="dialog" aria-controls="guide-panel" aria-expanded="false"><img id="guide-sprite" width="88" height="86" alt="" draggable="false"><span class="guide-label">ご案内</span></button>
+</div>
+<dialog id="guide-panel" aria-labelledby="guide-title">
+  <div class="guide-heading"><h2 id="guide-title">クロフネマンがご案内します</h2><button type="button" id="guide-close" aria-label="案内を閉じる">×</button></div>
+  <div class="guide-body">
+    <form id="guide-form"><label for="guide-query">聞きたいことを書いてください</label><div class="guide-entry"><input id="guide-query" type="search" maxlength="160" placeholder="例：見学、送迎、食事" autocomplete="off" aria-describedby="guide-note"><button id="guide-submit" type="submit">送る</button></div></form>
+    <p class="guide-note" id="guide-note">このページからご案内します。お名前などの個人情報は入力しないでください。入力は保存・送信されません。</p>
+    <div id="guide-faq" aria-label="よく聞かれること"><button type="button">デイサービス</button><button type="button">見学</button><button type="button">送迎</button><button type="button">食事</button><button type="button">アクセス</button><button type="button">会社について</button><button type="button">採用</button></div>
+    <div id="guide-results" aria-live="polite" aria-atomic="true"></div>
+  </div>
+</dialog>
+
 <script>
 (()=>{
 const still=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -914,10 +970,33 @@ function countUp(sec){if(still)return;sec.querySelectorAll('.pr').forEach(el=>{c
   if(still)return;
   const sh=document.getElementById('ship'),wp=document.getElementById('warp'),helm=document.querySelector('.helm'),im=sh.querySelector('img');
   let ph='wait',t0=performance.now()+1800;
+  // 案内役の登場だけ、同じ船を一時的に画面全体へ。巡航の台本はそのまま再開する。
+  let guideFlight=null;
+  function restoreShip(n){
+    if(!guideFlight)return;
+    const g=guideFlight;g.parent.insertBefore(sh,g.next);sh.classList.remove('guide-flyby');
+    if(g.style===null)sh.removeAttribute('style');else sh.setAttribute('style',g.style);
+    g.stage.remove();t0+=n-g.start;guideFlight=null;
+  }
+  document.addEventListener('guide:flyby',()=>{
+    if(guideFlight)return;
+    const stage=document.createElement('div');stage.id='guide-flight-stage';stage.setAttribute('aria-hidden','true');
+    guideFlight={parent:sh.parentNode,next:sh.nextSibling,style:sh.getAttribute('style'),start:performance.now(),dropped:false,stage};
+    document.body.append(stage);stage.append(sh);sh.classList.add('guide-flyby');
+  });
+  document.addEventListener('guide:flight-cancel',()=>restoreShip(performance.now()));
   function flash(x,y,sz){wp.style.width=wp.style.height=sz+'px';wp.style.margin=(-sz/2)+'px 0 0 '+(-sz/2)+'px';wp.style.left=x+'px';wp.style.top=y+'px';wp.classList.remove('go');void wp.offsetWidth;wp.classList.add('go');}
   // 閃光は計算上の点でなく、いま船が見えている所に出す
   function flashOnShip(sz){const r=im.getBoundingClientRect(),o=wp.offsetParent.getBoundingClientRect();flash(r.left-o.left+r.width*.5,r.top-o.top+r.height*.5,sz);}
   (function f(n){
+    if(guideFlight){
+      const g=guideFlight,k=Math.min(1,(n-g.start)/3000),sw=sh.offsetWidth;
+      sh.style.opacity=1;sh.style.filter='brightness(1.15)';sh.style.setProperty('--pw','1.3');
+      sh.style.transform=`translate(${-sw+(innerWidth+sw)*k}px,${innerHeight*.24}px) rotate(-4deg)`;
+      if(k>=.5&&!g.dropped){g.dropped=true;const r=im.getBoundingClientRect();document.dispatchEvent(new CustomEvent('guide:drop',{detail:{x:r.left+r.width*.52,y:r.top+r.height*.68}}));}
+      if(k>=1)restoreShip(n);
+      requestAnimationFrame(f);return;
+    }
     const W=helm.clientWidth,H=helm.clientHeight,sw=sh.offsetWidth,top=scrollY<H*.4;
     // 出発（手前・左下）と消える点（地平の上の暗い宇宙）
     const ax=W*.12,ay=H*.90,vx=W*.58,vy=H*.56,CRU=5200,CHG=550,JMP=190,ZC=8;
@@ -1051,6 +1130,137 @@ const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){cons
   if(s.id==='signals')kfmId();
   io.unobserve(s);}}),{threshold:.18});
 document.querySelectorAll('section').forEach(s=>io.observe(s));
+})();
+</script>
+<script>
+/* AIは使わず、本文の引用とページ内移動だけでご案内。外部通信・入力の保存なし。 */
+(()=>{
+  const hero=document.getElementById('guide-hero'),launch=document.getElementById('guide-launch'),sprite=document.getElementById('guide-sprite');
+  const bubble=document.getElementById('guide-bubble'),speech=bubble.querySelector('span'),panel=document.getElementById('guide-panel');
+  const query=document.getElementById('guide-query'),results=document.getElementById('guide-results'),motion=matchMedia('(prefers-reduced-motion: reduce)');
+  // 素材の正本は site/img のみ。v3の手元確認でも公開と同じ画像を読む。
+  const imageRoot=/\/v3\/(?:index\.html)?$/.test(location.pathname)?'../site/img/':'/img/';
+  const poses=Array.from({length:8},(_,i)=>imageRoot+'guide_pose'+i+'.webp');
+  const ready=Promise.all(poses.map(src=>{const im=new Image();im.src=src;return im.decode().catch(()=>{});}));
+  let seq=0,appeared=false,idleTimer=0,arrivalTimer=0,opening=false,returnFocus=true,at={x:0,y:0},lastAction=-1;
+  const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+  function pose(i){hero.dataset.pose=String(i);sprite.src=poses[i];}
+  pose(0);
+  function place(x,y){at={x,y};hero.style.transform=`translate(${x}px,${y}px)`;}
+  function dockPoint(){const v=visualViewport;return{x:(v?v.width:innerWidth)-104,y:(v?v.height:innerHeight)-136};}
+  function stop(){seq++;clearTimeout(idleTimer);hero.getAnimations({subtree:true}).filter(a=>a.effect.getTiming().iterations!==Infinity).forEach(a=>a.cancel());return seq;}
+  async function animate(el,frames,duration){if(motion.matches)return;try{await el.animate(frames,{duration,easing:'linear'}).finished;}catch{}}
+  function scheduleIdle(){
+    clearTimeout(idleTimer);if(motion.matches||!hero.classList.contains('docked')||panel.open||document.hidden)return;
+    idleTimer=setTimeout(async()=>{
+      const token=seq;let action=Math.floor(Math.random()*4);if(action===lastAction)action=(action+1)%4;lastAction=action;
+      if(action===0){pose(4);await animate(launch,[{transform:'translateY(0)'},{transform:'translateY(-24px)',offset:.45},{transform:'translateY(0)'}],600);}
+      if(action===1)await slash(token);
+      if(action===2){pose(4);await animate(launch,[{transform:'translateY(0) rotate(0deg)'},{transform:'translateY(-32px) rotate(-5deg)',offset:.4},{transform:'translateY(-26px) rotate(0deg)',offset:.7},{transform:'translateY(0) rotate(0deg)'}],1300);}
+      // 笑顔専用の絵はアプリに無いので、顔を変えず正面の立ち姿で軽く弾む。
+      if(action===3){pose(0);await animate(launch,[{transform:'scale(1)'},{transform:'scale(1.045)',offset:.5},{transform:'scale(1)'}],650);}
+      if(token===seq){pose(0);scheduleIdle();}
+    },10000+Math.random()*15000);
+  }
+  function dock(){bubble.hidden=true;hero.hidden=false;hero.classList.add('docked');pose(0);const p=dockPoint();place(p.x,p.y);scheduleIdle();}
+  async function retreat(token){
+    bubble.hidden=true;pose(4);const p=dockPoint(),s={...at};
+    const frames=[];for(let i=0;i<=24;i++){const k=i/24;frames.push({transform:`translate(${s.x+(p.x-s.x)*k}px,${s.y+(p.y-s.y)*k-Math.abs(Math.sin(k*Math.PI*3))*36}px)`});}
+    await animate(hero,frames,1250);if(token===seq)dock();
+  }
+  async function slash(token){
+    if(motion.matches)return;
+    for(const [i,ms] of [[2,180],[3,160],[5,300]]){if(token!==seq)return;pose(i);await pause(ms);}
+    if(token===seq)pose(0);
+  }
+  async function land({x,y}){
+    const token=seq;await ready;if(token!==seq)return;
+    hero.hidden=false;hero.classList.remove('docked');pose(4);
+    const sx=Math.max(16,Math.min(innerWidth-104,x-44)),sy=y-60,ex=Math.max(80,Math.min(innerWidth-168,innerWidth*.50-44)),ey=Math.max(200,innerHeight*.73-104);
+    place(sx,sy);const frames=[];
+    for(let i=0;i<=24;i++){const k=i/24;frames.push({transform:`translate(${sx+(ex-sx)*k}px,${sy+(ey-sy)*k-95*4*k*(1-k)}px)`});}
+    await animate(hero,frames,950);if(token!==seq)return;place(ex,ey);pose(3);
+    document.getElementById('guide-impact').animate([{opacity:.8,transform:'scale(.4)'},{opacity:0,transform:'scale(1.8)'}],{duration:400});
+    await animate(launch,[{transform:'scale(1.1,.8)'},{transform:'scale(1)'}],220);if(token!==seq)return;
+    // 最優先の3コマ。1コマ1.6〜1.8秒、元のアプリの絵だけを使う。
+    for(const [i,text,ms] of [[7,'AIクロフネマン参上！',1600],[6,'開国！',1600],[0,'何かご用はありませんか？　分からないことは？',1800]]){
+      if(token!==seq)return;pose(i);speech.textContent=text;bubble.hidden=false;await pause(ms);
+    }
+    if(token===seq)await retreat(token);
+  }
+  document.addEventListener('guide:drop',e=>{if(!motion.matches)land(e.detail);});
+  const sessionKey='eretz-guide-arrived-v1';
+  const arrivalDue=performance.now()+20000;
+  function remember(){try{sessionStorage.setItem(sessionKey,'1');}catch{}}
+  function begin(){
+    if(appeared||document.hidden)return;appeared=true;remember();clearTimeout(arrivalTimer);removeEventListener('scroll',onScroll);
+    if(motion.matches){dock();return;}document.dispatchEvent(new CustomEvent('guide:flyby'));
+  }
+  function onScroll(){if(scrollY>=innerHeight*2)begin();}
+  let visited=false;try{visited=sessionStorage.getItem(sessionKey)==='1';}catch{}
+  if(visited||motion.matches){appeared=true;remember();dock();}
+  else{arrivalTimer=setTimeout(begin,20000);addEventListener('scroll',onScroll,{passive:true});onScroll();}
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){clearTimeout(idleTimer);}else if(!appeared&&performance.now()>=arrivalDue){begin();}else scheduleIdle();});
+  bubble.querySelector('button').addEventListener('click',()=>{const token=stop();retreat(token);});
+  motion.addEventListener('change',()=>{if(motion.matches){stop();appeared=true;remember();clearTimeout(arrivalTimer);removeEventListener('scroll',onScroll);document.dispatchEvent(new CustomEvent('guide:flight-cancel'));dock();}});
+  addEventListener('resize',()=>{if(hero.classList.contains('docked')){const p=dockPoint();place(p.x,p.y);}});
+  if(visualViewport)visualViewport.addEventListener('resize',()=>{if(hero.classList.contains('docked')){const p=dockPoint();place(p.x,p.y);}});
+  launch.addEventListener('click',async()=>{
+    if(opening||panel.open)return;opening=true;stop();dock();clearTimeout(idleTimer);
+    await animate(launch,[{transform:'translateY(0) scale(1)'},{transform:'translateY(-18px) scale(1.12)',offset:.45},{transform:'translateY(0) scale(1)'}],330);
+    panel.showModal();launch.setAttribute('aria-expanded','true');query.focus({preventScroll:true});opening=false;
+  });
+  document.getElementById('guide-close').addEventListener('click',()=>panel.close());
+  panel.addEventListener('keydown',e=>{
+    if(e.key!=='Tab')return;
+    const controls=[...panel.querySelectorAll('button,input,a[href]')].filter(el=>!el.disabled&&el.getClientRects().length);
+    const i=controls.indexOf(document.activeElement),step=e.shiftKey?-1:1;
+    e.preventDefault();controls[(i+step+controls.length)%controls.length].focus();
+  });
+  panel.addEventListener('close',()=>{launch.setAttribute('aria-expanded','false');stop();pose(0);if(returnFocus)launch.focus({preventScroll:true});returnFocus=true;scheduleIdle();});
+
+  // 最初に本文を読み取り、見出しとその直下の文を検索用に控える。本文の書き換えはしない。
+  const norm=s=>s.normalize('NFKC').toLowerCase().replace(/\s+/g,'');
+  const excerpt=s=>(s.trim().match(/[^。！？]+[。！？]?/g)||[]).slice(0,2).join('');
+  const records=[];
+  const aliases={fleet:'デイサービス 福祉 介護',table:'食事 食べ物 ご飯 ごはん ランチ 弁当',contact:'見学 体験 予約 問い合わせ 相談 採用 求人',access:'アクセス 地図 場所 行き方 住所',registry:'会社について 会社 概要 エレツ',course:'事業 デザイン コンサル ホームページ制作',base:'住まい 賃貸 基地',signals:'ヒーロー クロフネマン SNS',media:'テレビ 新聞 取材'};
+  document.querySelectorAll('main section[id]').forEach(sec=>{
+    const h=sec.querySelector('.head h2'),intro=sec.querySelector('.head > p');if(!h)return;
+    function add(title,text,tab=null,extra=''){if(!text.trim())return;records.push({title,text:excerpt(text),id:sec.id,tab,keys:norm(title+' '+extra),body:norm(text)});}
+    if(intro)add(h.textContent,intro.textContent,null,aliases[sec.id]||'');
+    sec.querySelectorAll('h4').forEach(sub=>{
+      const art=sub.closest('.dossier'),tab=art?art.dataset.s:null,label=art?sec.querySelector(`.tabs button[data-s="${tab}"] b`).textContent+'・':'';
+      let texts=[];for(let node=sub.nextElementSibling;node&&!/^H[234]$/.test(node.tagName);node=node.nextElementSibling){if(node.matches('p,ul'))texts.push(node.textContent.trim());}
+      add(label+sub.textContent,texts.join(''),tab);
+    });
+    sec.querySelectorAll('h3').forEach(sub=>{let node=sub.nextElementSibling;if(node&&node.matches('p'))add(sub.textContent,node.textContent);});
+    if(sec.id==='registry'){const dl=sec.querySelector('dl');add('会社の概要',dl.textContent.replace(/\s+/g,' ').trim(),null,'会社概要 エレツ');}
+  });
+  function jumpCard(record,fallback=false){
+    const article=document.createElement('article'),heading=document.createElement('h3'),p=document.createElement('p'),a=document.createElement('a');
+    heading.textContent=fallback?'お問い合わせへ':record.title+'のことなら、こちらです';p.textContent=record.text;
+    a.href='#'+record.id;a.className='guide-jump';a.textContent=fallback?'お問い合わせへ':'そこへ行く';
+    a.addEventListener('click',e=>{e.preventDefault();returnFocus=false;panel.close();if(record.tab!==null)document.querySelector(`#fleet .tabs button[data-s="${record.tab}"]`).click();const target=document.getElementById(record.id);target.setAttribute('tabindex','-1');target.focus({preventScroll:true});target.scrollIntoView({behavior:motion.matches?'instant':'smooth'});});
+    article.append(heading,p,a);results.append(article);
+  }
+  function search(text){
+    const q=norm(text).slice(0,160);if(!q)return;results.replaceChildren();
+    const contact=records.find(r=>r.id==='contact');
+    // 空き・費用・個別の介護判断は、ページの語の一致よりも問い合わせを優先する。
+    if(/料金|費用|利用料|金額|値段|いくら|空き|空い|空いて|空席|満員|個別.*介護|介護.*相談|認定|要介護|介護度|病気|持病|服薬|薬|認知症|私|わたし|母|父|家族|症状/.test(q)){
+      jumpCard(contact,true);
+    }else{
+      const tokens=new Set();
+      for(const word of q.match(/[一-龠々ァ-ヶーa-z0-9]{2,}/g)||[]){tokens.add(word);for(let i=0;i<word.length-1;i++)tokens.add(word.slice(i,i+2));}
+      for(const word of ['お問い合わせ','問い合わせ','ごはん','ご飯','どこ'])if(q.includes(norm(word)))tokens.add(norm(word));
+      const ranked=records.map((r,i)=>({r,i,score:[...tokens].reduce((n,t)=>n+(r.keys.includes(t)?8:r.body.includes(t)?2:0),0)})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score||a.i-b.i);
+      const unique=[];for(const x of ranked){if(!unique.some(r=>r.id===x.r.id&&r.tab===x.r.tab))unique.push(x.r);if(unique.length===3)break;}
+      if(unique.length)unique.forEach(r=>jumpCard(r));else{const p=document.createElement('p');p.textContent='ごめんなさい、うまく探せませんでした。お問い合わせからお気軽にどうぞ';results.append(p);jumpCard(contact,true);}
+    }
+    const token=stop();slash(token);
+  }
+  document.getElementById('guide-form').addEventListener('submit',e=>{e.preventDefault();search(query.value);});
+  document.querySelectorAll('#guide-faq button').forEach(b=>b.addEventListener('click',()=>{query.value=b.textContent;search(b.textContent);}));
 })();
 </script>
 </body>
